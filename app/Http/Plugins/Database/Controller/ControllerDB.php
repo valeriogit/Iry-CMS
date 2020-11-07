@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Plugins\Database;
+namespace App\Http\Plugins\Database\Controller;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\BackendController;
+use App\Http\Controllers\PluginController;
 
-class DB extends BackendController
+class ControllerDB extends PluginController
 {
   public function indexx()
   {

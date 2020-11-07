@@ -21,7 +21,7 @@
 <body class="hold-transition register-page">
 <div class="register-box">
   <div class="register-logo">
-    <a href="../../index2.html"><b>Admin</b>LTE</a>
+    <a href="{{ url('/') }}"><img src="{{ asset('img').$config->logoSite}}" class="img-fluid"></a>
   </div>
 
   <div class="card">

@@ -2,6 +2,6 @@
 namespace App\Http\Plugins;
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Plugins\Database\DB;
+use App\Http\Plugins\Database\Controller\ControllerDB;
 
-Route::get('/db', [DB::class, 'indexx']);
+Route::get('/db', [ControllerDB::class, 'indexx']);

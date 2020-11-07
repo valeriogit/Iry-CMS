@@ -9,12 +9,21 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
+use App\Models\Configuration;
 
 class AccessoController extends Controller
 {
+  private $config;
+
+  public function __construct()
+  {
+    $this->config = Configuration::first();
+  }
+
   public function getLogin(){
-    //dd(Session::get('errlogin'));
-    return view('frontend.login')->with('errlogin', Session::get('errlogin'));
+    return view('frontend.login')
+            ->with('errlogin', Session::get('errlogin'))
+            ->with('config', $this->config);
   }
 
   public function postLogin(Request $request)
@@ -46,7 +55,7 @@ class AccessoController extends Controller
   }
 
   public function getRegistration(){
-    return view('frontend.registration');
+    return view('frontend.registration')->with('config', $this->config);
   }
 
   public function postRegistration(Request $request) {

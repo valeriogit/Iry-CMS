@@ -24,7 +24,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="{{ url('home') }}"><b>Admin</b>LTE</a>
+    <a href="{{ url('/') }}"><img src="{{ asset('img').$config->logoSite}}" class="img-fluid"></a>
   </div>
   <!-- /.login-logo -->
   <div class="card">
