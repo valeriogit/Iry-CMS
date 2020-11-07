@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 use App\Models\User;
 
 class AccessoController extends Controller
@@ -26,13 +28,17 @@ class AccessoController extends Controller
       return redirect('login')->withErrors($validator);
     }
 
-    $username = $request->input('username');
-    $password = $request->input('password');
-    $remember = $request->input('remember');
-
+    $username = $request->username;
+    $password = $request->password;
+    $remember = $request->remember;
 
     if (Auth::attempt(['username' => $username, 'password' => $password], $remember)) {
-      dd('autenticato');
+      if (Auth::user()->isSuperAdmin()) {
+        return redirect('admin');
+      }
+      else {
+        //return redirect('home');
+      }
     }
 
     $errlogin = "Username or password incorrect";
@@ -47,7 +53,7 @@ class AccessoController extends Controller
 
     $validator = Validator::make($request->all(), [
       'username'  => 'required|unique:users|max:255',
-      'email'    => 'required|unique:users|max:255',
+      'email'     => 'required|unique:users|max:255',
       'password'  => 'required',
       'password2' => 'required',
       'terms'     => 'required',
@@ -58,10 +64,10 @@ class AccessoController extends Controller
     }
 
     $user = new User;
-    $user->username = $request->input('username');
-    $user->email = $request->input('email');
-    $user->password = md5($request->input('password').'iry-cms');
-    $user->terms = $request->input('terms');
+    $user->username = $request->username;
+    $user->email = $request->email;
+    $user->password = Hash::make($request->password);
+    $user->terms = $request->terms;
     $user->save();
 
     return redirect('login');
