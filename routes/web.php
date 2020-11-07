@@ -13,4 +13,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/login', [BackendController::class, 'login']);
+Route::get('/login', [AccessoController::class, 'getLogin']);
+Route::post('/login', [AccessoController::class, 'postLogin']);
+Route::get('/register', [AccessoController::class, 'getRegistration']);
+Route::post('/register', [AccessoController::class, 'postRegistration']);
