@@ -68,7 +68,7 @@ class AccessoController extends Controller
   }
 
   public function getRegistration(){
-
+    mail("valerio.palazzo@gmail.com","My subject","ddd");
     if(Auth::check()){
       return redirect('/');
     }
@@ -95,7 +95,14 @@ class AccessoController extends Controller
     $user->email = $request->email;
     $user->password = Hash::make($request->password);
     $user->terms = $request->terms;
+
+    if($this->config->emailValidation){
+      $user->emailValidate = Hash::make($request->email);
+    }
+
     $user->save();
+
+
 
     return redirect('login');
   }

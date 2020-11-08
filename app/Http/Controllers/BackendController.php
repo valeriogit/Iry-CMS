@@ -7,11 +7,8 @@ use Auth;
 
 class BackendController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function Updater();
+
     public function index()
     {
       if(Auth::user() && Auth::user()->isSuperAdmin())
