@@ -20,14 +20,17 @@ class AccessoController extends Controller
     $this->config = Configuration::first();
   }
 
-  public function getLogin(){
+  public function getLogin() {
+    if(Auth::check()){
+      return redirect('/');
+    }
+
     return view('frontend.login')
             ->with('errlogin', Session::get('errlogin'))
             ->with('config', $this->config);
   }
 
-  public function postLogin(Request $request)
-  {
+  public function postLogin(Request $request) {
     $validator = Validator::make($request->all(), [
       'username'  => 'required',
       'password'  => 'required'
@@ -54,7 +57,22 @@ class AccessoController extends Controller
     return redirect('login')->with('errlogin',$errlogin);
   }
 
+  public function Logout()
+  {
+    if(Auth::check())
+    {
+      Auth::logout();
+    }
+
+    return redirect('/');
+  }
+
   public function getRegistration(){
+
+    if(Auth::check()){
+      return redirect('/');
+    }
+
     return view('frontend.registration')->with('config', $this->config);
   }
 

@@ -14,7 +14,7 @@ class BackendController extends Controller
      */
     public function index()
     {
-      if(Auth::user())
+      if(Auth::user() && Auth::user()->isSuperAdmin())
       {
         return view('backend.content');
       }
