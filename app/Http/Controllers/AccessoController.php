@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
+use App\Mail\ValidationEmail;
 use App\Models\User;
 use App\Models\Configuration;
 
@@ -68,11 +70,9 @@ class AccessoController extends Controller
   }
 
   public function getRegistration(){
-    mail("valerio.palazzo@gmail.com","My subject","ddd");
     if(Auth::check()){
       return redirect('/');
     }
-
     return view('frontend.registration')->with('config', $this->config);
   }
 
@@ -98,11 +98,10 @@ class AccessoController extends Controller
 
     if($this->config->emailValidation){
       $user->emailValidate = Hash::make($request->email);
+      Mail::to('valerio.palazzo@gmail.com')->send(new ValidationEmail($this->config,$user));
     }
 
     $user->save();
-
-
 
     return redirect('login');
   }
