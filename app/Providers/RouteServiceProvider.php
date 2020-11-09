@@ -5,7 +5,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
-use Log;
+
 class RouteServiceProvider extends ServiceProvider
 {
     /**
@@ -37,19 +37,13 @@ class RouteServiceProvider extends ServiceProvider
                 ->middleware('api')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
-          /*  Route::middleware('web')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/web.php'));*/
-                Route::middleware('web')
+            Route::middleware('web')
               ->namespace($this->namespace)
               ->group(function ($router) {
                 require base_path('routes/backend.php');
                 require base_path('routes/web.php');
-                //require base_path('routes/plugins.php');
               });
         });
-        //Automatic insert of Provider;
-        require_once app_path('Http\Plugins\Database\Providers\RouteServiceProvider.php');
     }
     /**
      * Configure the rate limiters for the application.
@@ -62,11 +56,4 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
         });
     }
-    /*protected function Database() {
-      Route::middleware('web')
-        ->namespace($this->namespace)
-        ->group(function ($router) {
-          require app_path('\Http\Plugins\Database\routes\web.php');
-        });
-    }*/
 }

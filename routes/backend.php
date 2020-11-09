@@ -13,3 +13,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/admin', [BackendController::class, 'index']);
+Route::get('/admin/update', [BackendController::class, 'checkUpdate']);
+Route::post('/admin/update', [BackendController::class, 'takeUpdate']);

@@ -9,23 +9,31 @@ class ControllerDB extends PluginController
 {
   public function indexx()
   {
-    $emails = file(app_path('Providers\RouteServiceProvider.php'), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $provider = file(app_path('Http\Plugins\PluginProvider.php'), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $flag = false;
+    $positionInsert = "";
 
-    foreach ($emails as $key => $value) {
+    foreach ($provider as $key => $value) {
       if($value=="        //Automatic insert of Provider")
       {
-        if($emails[$key+1]!= "        require_once app_path('\Http\Plugins\Users\Providers\RouteServiceProvider.php');")
-        {
-          array_splice($emails, $key+1, 0, "        require_once app_path('\Http\Plugins\Users\Providers\RouteServiceProvider.php');");
-        }
+        $positionInsert = $key+1;
+      }
+      if($provider[$key] == '        $calls->Databasess();')
+      {
+        $flag = true;
       }
     }
 
-    $myfile = fopen(app_path('Providers\RouteServiceProvider.php'), "w") or die("Unable to open file!");
-    $emails = implode("\n",$emails);
-    $txt = $emails;
+    if($flag==false){
+      array_splice($provider, $positionInsert, 0, '        $calls->Databasess();');
+    }
+
+    $myfile = fopen(app_path('Http\Plugins\PluginProvider.php'), "w");
+    $provider = implode("\n",$provider);
+    $txt = $provider;
     fwrite($myfile, $txt);
     fclose($myfile);
-    return Parent::pluginPage('Database\view\index');
+
+    return redirect('/admin');
   }
 }
