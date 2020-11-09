@@ -21,3 +21,4 @@ Route::post('/register', [AccessoController::class, 'postRegistration']);
 Route::get('/validateMail/{$token}', [AccessoController::class, 'validateMail']);
 
 Route::get('/admin', [BackendController::class, 'index']);
+Route::get('/update', [BackendController::class, 'updater']);
