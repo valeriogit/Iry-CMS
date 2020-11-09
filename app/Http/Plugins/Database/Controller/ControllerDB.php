@@ -18,14 +18,14 @@ class ControllerDB extends PluginController
       {
         $positionInsert = $key+1;
       }
-      if($provider[$key] == '        $calls->Databasess();')
+      if($provider[$key] == '        $calls->Database();')
       {
         $flag = true;
       }
     }
 
     if($flag==false){
-      array_splice($provider, $positionInsert, 0, '        $calls->Databasess();');
+      array_splice($provider, $positionInsert, 0, '        $calls->Database();');
     }
 
     $myfile = fopen(app_path('Http\Plugins\PluginProvider.php'), "w");

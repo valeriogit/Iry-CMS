@@ -34,7 +34,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <a href="{{ url('/') }}" class="nav-link">Show site</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a style="cursor:pointer" class="nav-link" onclick="checkUpdate();">Contact</a>
+        <a style="cursor:pointer" class="nav-link" onclick="checkUpdate();">Check Update</a>
       </li>
     </ul>
     <!-- Right navbar links -->
@@ -160,16 +160,49 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script src="{{ asset('js/bootstrap/bootstrap.bundle.min.js') }}"></script>
   <!-- AdminLTE App -->
   <script src="{{ asset('js/adminlte/adminlte.min.js') }}"></script>
+  <!-- Sweet Alert -->
+  <script src="{{ asset('js/sweetalert2/sweetalert2.min.js') }}"></script>
 
   <script type="text/javascript">
     function checkUpdate()
     {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top',
+        showConfirmButton: false,
+        timer: 3000,
+        width: '50rem',
+      });
+
       $.get("/admin/update", function(status){
+
         if(status==true){
-          alert('gg');
+          Swal.queue([{
+            title: 'Check Update',
+            confirmButtonText: 'Go Update',
+            showCancelButton: true,
+            text:
+              'Update available - Download & Install it?',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+              $.post("/admin/update", {_token:"{{csrf_token()}}"}, function(status){
+                Swal.queue([{
+                  title: 'Updated',
+                  confirmButtonText: 'Iry Updated!',
+                  text:
+                    'Thanks for updated Iry <3',
+                  }]);
+              });
+            }
+          }])
         }
         else {
-
+          Swal.queue([{
+            title: 'Check Update',
+            confirmButtonText: 'OK',
+            text:
+              'No update available',
+          }])
         }
       });
     }

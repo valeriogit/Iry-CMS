@@ -40,7 +40,6 @@ class BackendController extends Controller
 
   public function takeUpdate(){
     if(Auth::user() && Auth::user()->isSuperAdmin()){
-
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_URL, 'https://raw.githubusercontent.com/valeriogit/Iry-CMS/main/updater/version.json');
       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
