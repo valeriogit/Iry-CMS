@@ -17,8 +17,7 @@ class AccessoController extends Controller
 {
   private $config;
 
-  public function __construct()
-  {
+  public function __construct() {
     $this->config = Configuration::first();
   }
 
@@ -109,8 +108,7 @@ class AccessoController extends Controller
     return redirect('register')->with('mailSent',$mailSent);
   }
 
-  public function validateMail($token)
-  {
+  public function validateMail($token) {
     if($token != "")
     {
       $user = User::where('emailValidate', '=',$token)->first();
@@ -119,5 +117,39 @@ class AccessoController extends Controller
     }
 
     return redirect('login');
+  }
+
+  public function getForgotPassword()
+  {
+    if(Auth::check()){
+      return redirect('/');
+    }
+
+    return view('frontend.forgotPassword')
+      ->with('mailSent', Session::get('mailSent'))
+      ->with('config', $this->config);
+  }
+
+  public function postForgotPassword(Request $request)
+  {
+    $validator = Validator::make($request->all(), [
+      'email' => 'required'
+    ]);
+
+    if ($validator->fails()) {
+      return redirect('getForgotPassword')->withErrors($validator);
+    }
+
+    $user = User::where('email', '=', $request->email);
+
+    $mailSent = "Username or password incorrect";
+
+    if($user){
+      $user->forgotPassword = md5($request->email);
+      $user->save();
+      $mailSent = "Check your email for password reset";
+    }
+
+    return redirect('getForgotPassword')->with('$mailSent',$mailSent);
   }
 }
