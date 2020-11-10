@@ -346,7 +346,7 @@ ul.social li{
             		<td>
             			<div class="text" style="padding: 0 2.5em; text-align: center;">
             				<h2>Please verify your email</h2>
-            				<p><a href="{{fgjfj}}" class="btn btn-primary">Validate me!</a></p>
+            				<p><a href="{{ url('/validateMail').'/'.$user->emailValidate}}" class="btn btn-primary">Validate me!</a></p>
             			</div>
             		</td>
             	</tr>

@@ -51,7 +51,7 @@ class AccessoController extends Controller
         return redirect('admin');
       }
       else {
-        //return redirect('home');
+        return redirect('home');
       }
     }
 
@@ -59,8 +59,7 @@ class AccessoController extends Controller
     return redirect('login')->with('errlogin',$errlogin);
   }
 
-  public function Logout()
-  {
+  public function Logout() {
     if(Auth::check())
     {
       Auth::logout();
@@ -73,7 +72,10 @@ class AccessoController extends Controller
     if(Auth::check()){
       return redirect('/');
     }
-    return view('frontend.registration')->with('config', $this->config);
+
+    return view('frontend.registration')
+      ->with('mailSent', Session::get('mailSent'))
+      ->with('config', $this->config);
   }
 
   public function postRegistration(Request $request) {
@@ -97,11 +99,24 @@ class AccessoController extends Controller
     $user->terms = $request->terms;
 
     if($this->config->emailValidation){
-      $user->emailValidate = Hash::make($request->email);
+      $user->emailValidate = md5($request->email);
       Mail::to('valerio.palazzo@gmail.com')->send(new ValidationEmail($this->config,$user));
     }
 
     $user->save();
+
+    $mailSent = "Validate the email sent to your address";
+    return redirect('register')->with('mailSent',$mailSent);
+  }
+
+  public function validateMail($token)
+  {
+    if($token != "")
+    {
+      $user = User::where('emailValidate', '=',$token)->first();
+      $user->emailValidate = 1;
+      $user->save();
+    }
 
     return redirect('login');
   }

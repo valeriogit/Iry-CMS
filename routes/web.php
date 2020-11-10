@@ -18,4 +18,4 @@ Route::post('/login', [AccessoController::class, 'postLogin']);
 Route::get('/logout', [AccessoController::class, 'Logout']);
 Route::get('/register', [AccessoController::class, 'getRegistration']);
 Route::post('/register', [AccessoController::class, 'postRegistration']);
-Route::get('/validateMail/{$token}', [AccessoController::class, 'validateMail']);
+Route::get('/validateMail/{token}', [AccessoController::class, 'validateMail']);

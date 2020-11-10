@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="{{ asset('css/icheck-bootstrap/icheck-bootstrap.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('css/adminlte/adminlte.min.css') }}">
+  <!-- Sweet Alert -->
+  <link rel="stylesheet" href="{{ asset('css/sweetalert2/bootstrap-4.min.css') }}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -137,5 +139,24 @@
 <script src="{{ asset('js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('js/adminlte/adminlte.min.js') }}"></script>
+<!-- Sweet Alert -->
+<script src="{{ asset('js/sweetalert2/sweetalert2.min.js') }}"></script>
+
+@if($mailSent != "")
+  <script type="text/javascript">
+  const Toast = Swal.mixin({
+      toast: true,
+      position: 'center',
+      showConfirmButton: false,
+      timer: 3000
+    });
+
+  Toast.fire({
+        icon: 'success',
+        title: '&nbsp;&nbsp;&nbsp;{!! $mailSent !!}'
+      })
+      </script>
+@endif
+
 </body>
 </html>

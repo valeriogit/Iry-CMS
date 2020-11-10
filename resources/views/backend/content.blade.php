@@ -1,5 +1,9 @@
 @extends('backend.app')
 
+@section('title')
+  <title>{{ $config->nameSite }} - Dashboard</title>
+@endsection
+
 @section('content')
   <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
