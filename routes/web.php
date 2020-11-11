@@ -25,3 +25,6 @@ Route::get('/validateMail/{token}', [AccessoController::class, 'validateMail']);
 
 Route::get('/forgotPassword', [AccessoController::class, 'getForgotPassword']);
 Route::post('/forgotPassword', [AccessoController::class, 'postForgotPassword']);
+
+Route::get('/resetPassword/{token}', [AccessoController::class, 'getResetPassword']);
+Route::post('/resetPassword', [AccessoController::class, 'postResetPassword']);

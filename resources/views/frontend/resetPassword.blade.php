@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>{{ $config->nameSite }} | Forgot Password</title>
+  <title>{{ $config->nameSite }} | Recover Password</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -15,8 +15,6 @@
   <link rel="stylesheet" href="{{ asset('css/icheck-bootstrap/icheck-bootstrap.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('css/adminlte/adminlte.min.css') }}">
-  <!-- Sweet Alert -->
-  <link rel="stylesheet" href="{{ asset('css/sweetalert2/bootstrap-4.min.css') }}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -28,25 +26,33 @@
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
-      <p class="login-box-msg">You forgot your password? Here you can easily retrieve a new password.</p>
+      <p class="login-box-msg">You are only one step a way from your new password, recover your password now.</p>
 
-      <form action="{{ url('forgotPassword') }}" method="post">
+      <form action="{{ url('resetPassword') }}" method="post">
         {{ csrf_field() }}
+        <input type="hidden" name="tokenPass" value="{{ $tokenPass }}">
         <div class="input-group mb-3">
-          <input type="email" id="email" name="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email" required>
+          <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" required>
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" id="password2" name="password2" class="form-control @error('password2') is-invalid @enderror" placeholder="Confirm Password" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
             </div>
           </div>
           <div class="invalid-feedback">
-            Insert email
+            The password are different
           </div>
         </div>
-
         <div class="row">
           <div class="col-12">
-            <button type="submit" class="btn btn-primary btn-block">Request new password</button>
+            <button type="submit" id="btnsubmit" class="btn btn-primary btn-block">Change password</button>
           </div>
           <!-- /.col -->
         </div>
@@ -54,9 +60,6 @@
 
       <p class="mt-3 mb-1">
         <a href="{{ url('login') }}">Login</a>
-      </p>
-      <p class="mb-0">
-        <a href="{{ url('register') }}" class="text-center">Register a new membership</a>
       </p>
     </div>
     <!-- /.login-card-body -->
@@ -70,23 +73,24 @@
 <script src="{{ asset('js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('js/adminlte/adminlte.min.js') }}"></script>
-<!-- Sweet Alert -->
-<script src="{{ asset('js/sweetalert2/sweetalert2.min.js') }}"></script>
 
-@if($mailSent != "")
-  <script type="text/javascript">
-  const Toast = Swal.mixin({
-      toast: true,
-      position: 'center',
-      showConfirmButton: false,
-      timer: 3000
-    });
+<script type="text/javascript">
+  function CheckPassword(){
+    let psw1 = $("#password");
+    let psw2 = $("#password2");
+    let btn = $('#btnsubmit');
 
-  Toast.fire({
-        icon: 'success',
-        title: '&nbsp;&nbsp;&nbsp;{!! $mailSent !!}'
-      })
-      </script>
-@endif
+    if(psw1.val() != psw2.val())
+    {
+      psw2.addClass("is-invalid");
+      btn.prop("disabled",true);
+    }
+    else {
+      psw2.removeClass("is-invalid");
+      btn.prop("disabled",false)
+    }
+  }
+</script>
+
 </body>
 </html>

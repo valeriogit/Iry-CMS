@@ -10,11 +10,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 use App\Mail\ValidationEmail;
+use App\Mail\ResetPassword;
 use App\Models\User;
 use App\Models\Configuration;
 
-class AccessoController extends Controller
-{
+class AccessoController extends Controller{
   private $config;
 
   public function __construct() {
@@ -119,8 +119,7 @@ class AccessoController extends Controller
     return redirect('login');
   }
 
-  public function getForgotPassword()
-  {
+  public function getForgotPassword() {
     if(Auth::check()){
       return redirect('/');
     }
@@ -130,26 +129,60 @@ class AccessoController extends Controller
       ->with('config', $this->config);
   }
 
-  public function postForgotPassword(Request $request)
-  {
+  public function postForgotPassword(Request $request) {
     $validator = Validator::make($request->all(), [
       'email' => 'required'
     ]);
 
     if ($validator->fails()) {
-      return redirect('getForgotPassword')->withErrors($validator);
+      return redirect('forgotPassword')->withErrors($validator);
     }
 
-    $user = User::where('email', '=', $request->email);
+    $user = User::where('email', '=', $request->email)->first();
 
-    $mailSent = "Username or password incorrect";
+    $mailSent = "Email incorrect";
 
     if($user){
+
       $user->forgotPassword = md5($request->email);
       $user->save();
+
       $mailSent = "Check your email for password reset";
+      Mail::to('valerio.palazzo@gmail.com')->send(new ResetPassword($this->config,$user));
     }
 
-    return redirect('getForgotPassword')->with('$mailSent',$mailSent);
+    return redirect('forgotPassword')->with('mailSent',$mailSent);
+  }
+
+  public function getResetPassword($token) {
+    if($token != "")
+    {
+      return view('frontend.resetPassword')
+        ->with('tokenPass', $token)
+        ->with('config', $this->config);
+    }
+
+    return redirect('login');
+  }
+
+  public function postResetPassword(Request $request) {
+    $validator = Validator::make($request->all(), [
+      'password'  => 'required',
+      'password2' => 'required'
+    ]);
+
+    if ($validator->fails()) {
+      return redirect('resetPassword')->withErrors($validator);
+    }
+
+    $user = User::where('forgotPassword', '=', $request->tokenPass)->first();
+
+    if($user){
+      $user->forgotPassword = "";
+      $user->password = Hash::make($request->password);
+      $user->save();
+    }
+
+    return redirect('login');
   }
 }
