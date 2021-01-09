@@ -65,3 +65,7 @@ Route::get('example', function () {
         return "Iry CMS updated";
     }
 });
+
+Route::get('a', function () {
+    $a = new Tournament;
+});
