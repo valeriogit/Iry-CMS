@@ -15,7 +15,7 @@ return [
 
     'paths' => [
         resource_path('views'),
-        app_path('Http\Plugins'),
+        app_path('Http\Plugins\\'),
     ],
 
     /*
