@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,6 +14,15 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/admin', [BackendController::class, 'index']);
-Route::get('/admin/update', [BackendController::class, 'checkUpdate']);
-Route::post('/admin/update', [BackendController::class, 'takeUpdate']);
+
+Route::prefix('admin')->group(function () {
+    Route::get('/', [BackendController::class, 'index']);
+    Route::get('/update', [BackendController::class, 'checkUpdate']);
+    Route::post('/update', [BackendController::class, 'takeUpdate']);
+
+    Route::get('/plugins', [PluginController::class, 'show']);
+    Route::get('/plugins/create', [PluginController::class, 'create']);
+    Route::post('/plugins/create', [PluginController::class, 'save']);
+    Route::get('/plugins/upload', [PluginController::class, 'upload']);
+    Route::post('/plugins/upload', [PluginController::class, 'uploaded']);
+});

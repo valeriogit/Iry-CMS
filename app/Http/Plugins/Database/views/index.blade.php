@@ -1,6 +1,6 @@
-@extends('backend.app')
+@extends("backend.app")
 
-@section('content')
+@section("content")
   <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -31,7 +31,7 @@
                 <h5 class="card-title">Card title</h5>
 
                 <p class="card-text">
-                  Some quick example text to build on the card title and make up the bulk of the card's
+                  Some quick example text to build on the card title and make up the bulk of the card\'s
                   content.
                 </p>
 
@@ -45,7 +45,7 @@
                 <h5 class="card-title">Card title</h5>
 
                 <p class="card-text">
-                  Some quick example text to build on the card title and make up the bulk of the card's
+                  Some quick example text to build on the card title and make up the bulk of the card\'s
                   content.
                 </p>
                 <a href="#" class="card-link">Card link</a>
@@ -87,4 +87,8 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
+@endsection
+
+@section("script")
+    //javascript code without tag <script></script>
 @endsection

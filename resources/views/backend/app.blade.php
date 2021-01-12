@@ -5,6 +5,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 -->
 <html lang="en">
 <head>
+    @if(session()->has('downloadPlugin'))
+         <meta http-equiv="refresh" content="5;url={{ asset('/tmp/'.session('downloadPlugin')) }}">
+      @endif
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -19,6 +23,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="{{ asset('css/sweetalert2/bootstrap-4.min.css') }}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="{{ asset('css/datatables-bs4/dataTables.bootstrap4.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/datatables-responsive/responsive.bootstrap4.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/datatables-buttons/buttons.bootstrap4.min.css') }}">
+  <!-- Sweet Alert -->
+  <link rel="stylesheet" href="{{ asset('css/sweetalert2/bootstrap-4.min.css') }}">
 </head>
 <body class="hold-transition sidebar-mini layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
@@ -73,7 +83,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{{ url('/admin') }}" class="brand-link">
+    <a href="{{ action('BackendController@index') }}" class="brand-link">
       <img src="{{ asset('img').$config->icoSite }}" alt="{{ $config->nameSite }}" class="brand-image elevation-3"
            style="opacity: .8;max-height: 42.5px !important;margin: .25rem .5rem 0 .5rem !important">
       <span class="brand-text font-weight-light">
@@ -149,6 +159,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script src="{{ asset('js/adminlte/adminlte.min.js') }}"></script>
   <!-- Sweet Alert -->
   <script src="{{ asset('js/sweetalert2/sweetalert2.min.js') }}"></script>
+  <!-- DataTables  & Plugins -->
+  <script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ asset('js/datatables-bs4/dataTables.bootstrap4.min.js') }}"></script>
+  <script src="{{ asset('js/datatables-responsive/dataTables.responsive.min.js') }}"></script>
+  <script src="{{ asset('js/datatables-responsive/responsive.bootstrap4.min.js') }}"></script>
+  <script src="{{ asset('js/datatables-buttons/dataTables.buttons.min.js') }}"></script>
+  <script src="{{ asset('js/datatables-buttons/buttons.bootstrap4.min.js') }}"></script>
+  <!-- Sweet Alert -->
+  <script src="{{ asset('js/sweetalert2/sweetalert2.min.js') }}"></script>
+  <!-- bs-custom-file-input -->
+  <script src="{{ asset('js/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
 
   <script type="text/javascript">
     function checkUpdate()
@@ -192,6 +213,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
       });
     }
+
+    @yield('script')
   </script>
 
   </body>
