@@ -94,14 +94,23 @@ class PluginController extends Controller
 
                         $pathPlugins = $pathPlugins . "/" . $file_name;
                         if (file_exists($pathPlugins . "/info.json")) {
-                            $strJsonFileContents = file_get_contents($pathPlugins . "/info.json");
+                            $strJsonFileContents = File::get($pathPlugins . "/info.json");
                             // Convert to array
                             $array = json_decode($strJsonFileContents, true);
-                            dd($array);
+
+                            $plugin->name = $array["name"];
+                            $plugin->description = $array["description"];
+                            $plugin->author = $array["author"];
+                            $plugin->author_email = $array["email"];
+                        }
+                        else{
+                            $plugin->name = $file_name;
+                            $plugin->author = $author;
                         }
 
+                        $plugin->save();
 
-
+                        session()->flash('installedPlugin', 'installed');
                         return redirect()->action([PluginController::class, 'show']);
                     }
 
@@ -193,12 +202,6 @@ class PluginController extends Controller
             } else {
                 //delete all content of folder
                 File::deleteDirectory($path);
-                /*$files = glob($path . '*'); // get all file names
-                foreach ($files as $file) { // iterate files
-                    if (is_file($file)) {
-                        unlink($file); // delete file
-                    }
-                }*/
             }
 
             //funzioni che creano i diversi file

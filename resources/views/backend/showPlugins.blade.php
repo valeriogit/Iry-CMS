@@ -25,7 +25,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">List of all installed plugins</h3>
+                <h3 class="card-title" style="padding-top: 8px;">List of all installed plugins</h3>
                 <a href="{{ action('PluginController@create') }}" class="float-right"><button type="button" class="btn btn-block btn-success">Create Plugin</button></a>
                 <a href="{{ action('PluginController@upload') }}" class="float-right mr-2"><button type="button" class="btn btn-block btn-primary">Upload Plugin</button></a>
               </div>
@@ -79,5 +79,19 @@
     $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false
     });
+
+    @if(session()->has('installedPlugin'))
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'center',
+            showConfirmButton: false,
+            timer: 3000
+        });
+
+        Toast.fire({
+            icon: 'success',
+            title: '&nbsp;&nbsp;&nbsp;Plugin installed successfully!'
+        })
+    @endif
 @endsection
 
