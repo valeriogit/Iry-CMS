@@ -15,7 +15,7 @@ class BackendController extends Controller
     public function __construct()
     {
         $this->config = Configuration::first();
-        $this->activePage = basename($_SERVER['PHP_SELF'], ".php");
+        $this->activePage = "admin";
     }
 
     public function checkUpdate()
@@ -100,12 +100,9 @@ class BackendController extends Controller
 
     public function index()
     {
-        if (Auth::user() && Auth::user()->isSuperAdmin()) {
             return view('backend.content')
                 ->with('config', $this->config)
                 ->with('activePage', $this->activePage);
-        }
 
-        return redirect('login');
     }
 }

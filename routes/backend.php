@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Route;
+use Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('admin')->group(function () {
+Route::group(['prefix' => 'admin',  'middleware' => 'isAdmin'], function()
+{
     Route::get('/', [BackendController::class, 'index']);
     Route::get('/update', [BackendController::class, 'checkUpdate']);
     Route::post('/update', [BackendController::class, 'takeUpdate']);

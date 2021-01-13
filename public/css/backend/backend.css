@@ -1,0 +1,112 @@
+/* Icon animating effect */
+@-webkit-keyframes shake {
+    0% {
+        -webkit-transform: rotate(-8deg);
+        transform: rotate(-8deg);
+    }
+
+    16% {
+        -webkit-transform: rotate(8deg);
+        transform: rotate(8deg);
+    }
+
+    20% {
+        -webkit-transform: rotate(16deg);
+        transform: rotate(16deg);
+    }
+
+    36% {
+        -webkit-transform: rotate(-16deg);
+        transform: rotate(-16deg);
+    }
+
+    40% {
+        -webkit-transform: rotate(-16deg);
+        transform: rotate(-16deg);
+    }
+
+    56% {
+        -webkit-transform: rotate(16deg);
+        transform: rotate(16deg);
+    }
+
+    60% {
+        -webkit-transform: rotate(16deg);
+        transform: rotate(16deg);
+    }
+
+    72% {
+        -webkit-transform: rotate(-16deg);
+        transform: rotate(-16deg);
+    }
+
+    80% {
+        -webkit-transform: rotate(-8deg);
+        transform: rotate(-8deg);
+    }
+
+    85%,
+    100% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+}
+@keyframes shake {
+    0% {
+        -webkit-transform: rotate(-8deg);
+        transform: rotate(-8deg);
+    }
+
+    16% {
+        -webkit-transform: rotate(8deg);
+        transform: rotate(8deg);
+    }
+
+    20% {
+        -webkit-transform: rotate(16deg);
+        transform: rotate(16deg);
+    }
+
+    36% {
+        -webkit-transform: rotate(-16deg);
+        transform: rotate(-16deg);
+    }
+
+    40% {
+        -webkit-transform: rotate(-16deg);
+        transform: rotate(-16deg);
+    }
+
+    56% {
+        -webkit-transform: rotate(16deg);
+        transform: rotate(16deg);
+    }
+
+    60% {
+        -webkit-transform: rotate(16deg);
+        transform: rotate(16deg);
+    }
+
+    72% {
+        -webkit-transform: rotate(-16deg);
+        transform: rotate(-16deg);
+    }
+
+    80% {
+        -webkit-transform: rotate(-8deg);
+        transform: rotate(-8deg);
+    }
+
+    85%,
+    100% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+}
+/* on Icon Effect */
+.shake-icon.hover-animation:hover,
+/* on parent's icon:hover Icon effect */
+.parent-hover-animation:hover > .shake-icon {
+    -webkit-animation: shake 0.8s ease;
+    animation: shake 0.8s ease;
+}

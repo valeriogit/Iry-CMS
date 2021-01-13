@@ -17,7 +17,7 @@ use Valeriogit\Tournament\Tournament;
 |
 */
 
-Route::get('/login', [AccessoController::class, 'getLogin']);
+Route::get('/login', [AccessoController::class, 'getLogin'])->name('login');
 Route::post('/login', [AccessoController::class, 'postLogin']);
 
 Route::get('/logout', [AccessoController::class, 'Logout']);

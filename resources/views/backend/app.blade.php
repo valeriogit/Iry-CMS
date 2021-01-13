@@ -29,6 +29,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="{{ asset('css/datatables-buttons/buttons.bootstrap4.min.css') }}">
   <!-- Sweet Alert -->
   <link rel="stylesheet" href="{{ asset('css/sweetalert2/bootstrap-4.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/backend/backend.css') }}">
 </head>
 <body class="hold-transition sidebar-mini layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
@@ -111,21 +112,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="#" class="nav-link @if($activePage=='admin') active @endif">
-              <i class="nav-icon fas fa-th"></i>
+            <a href="{{ action('BackendController@index') }}" class="nav-link parent-hover-animation @if($activePage=='admin') active @endif">
+                <i class="nav-icon shake-icon fas fa-home "></i>
               <p>
                 Dashboard
               </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-th shake-icon"></i>
+            <a href="{{ action('PluginController@show') }}" class="nav-link parent-hover-animation @if($activePage=='plugin') active @endif">
+                <i class="nav-icon shake-icon fas fa-puzzle-piece "></i>
               <p>
-                Simple Link
+                Plugins
               </p>
             </a>
           </li>
+          @yield('menu')
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

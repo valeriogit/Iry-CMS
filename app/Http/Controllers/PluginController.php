@@ -12,12 +12,12 @@ use Illuminate\Support\Facades\File;
 
 class PluginController extends Controller
 {
-    public function pluginPage($page)
+    public function pluginPage($page, $activePage = 'admin')
     {
         //we call this funciont from plugin for make views
         //and we call in this controller too
         $config = Configuration::first();
-        $activePage = basename($_SERVER['PHP_SELF'], ".php");
+
         return View::make($page)
             ->with('config', $config)
             ->with('activePage', $activePage);
@@ -27,18 +27,18 @@ class PluginController extends Controller
     {
         $plugins = Plugin::all();
 
-        return $this->pluginPage('backend.showPlugins')
+        return $this->pluginPage('backend.showPlugins', 'plugin')
             ->with('plugins', $plugins);
     }
 
     public function create()
     {
-        return $this->pluginPage('backend.createPlugin');
+        return $this->pluginPage('backend.createPlugin', 'plugin');
     }
 
     public function upload()
     {
-        return $this->pluginPage('backend.uploadPlugin');
+        return $this->pluginPage('backend.uploadPlugin', 'plugin');
     }
 
     public function uploaded(Request $request)
@@ -294,7 +294,7 @@ class Controller' . $name . ' extends PluginController
 {
     private function views($page)
     {
-        return PluginController::pluginPage("' . $author . '\\' . $name . '\\\views\\\" . $page);
+        return PluginController::pluginPage("' . $author . '\\' . $name . '\\\views\\\" . $page, "' . $author . '_' . $name . '");
     }
 
     public function index()
