@@ -39,9 +39,6 @@
                                     <input type="file" class="custom-file-input @error('zip') is-invalid @enderror" id="zip" name="zip" required accept=".zip">
                                     <label class="custom-file-label" for="zip">Choose ZIP file</label>
                                 </div>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">Upload</span>
-                                </div>
                             </div>
                         </div>
                     </div>

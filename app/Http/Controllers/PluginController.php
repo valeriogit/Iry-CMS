@@ -8,6 +8,7 @@ use ZipArchive;
 
 use App\Models\Configuration;
 use App\Models\Plugin;
+use Illuminate\Support\Facades\File;
 
 class PluginController extends Controller
 {
@@ -54,10 +55,27 @@ class PluginController extends Controller
                     $nameFileComplete = $request->zip->getClientOriginalName();
 
                     //take name file and check dir
-                    $file_name = pathinfo($nameFileComplete, PATHINFO_FILENAME); // file
-                    $pathPlugins = app_path('Http/Plugins/' . ucfirst($file_name));
+                    $file_name = pathinfo($nameFileComplete, PATHINFO_FILENAME);
+
+                    //esplodo nome e prendo prima parte che è autore
+                    $file_name = explode("_", $file_name);
+
+                    if (is_array($file_name)) {
+                        $author = $file_name[0];
+
+                        //ricostruisco nome
+                        array_shift($file_name);
+
+                        $file_name = implode("_", $file_name);
+                    }
+
+                    $pathPlugins = app_path('Http/Plugins/' . $author);
 
                     if (!file_exists($pathPlugins)) {
+                        File::makeDirectory($pathPlugins);
+                    }
+
+                    if (!file_exists($pathPlugins . "/" . $file_name)) {
                         $path = $request->zip->storeAs('tmpUpload', $nameFileComplete);
                         $path = storage_path('app/' . $path);
                         //extract the plugin
@@ -69,12 +87,26 @@ class PluginController extends Controller
                         }
 
                         //install plugin
-                        $this->installPlugin(ucfirst($file_name));
+                        $this->installPlugin($author, $file_name);
+
+                        //save on db
+                        $plugin = new Plugin;
+
+                        $pathPlugins = $pathPlugins . "/" . $file_name;
+                        if (file_exists($pathPlugins . "/info.json")) {
+                            $strJsonFileContents = file_get_contents($pathPlugins . "/info.json");
+                            // Convert to array
+                            $array = json_decode($strJsonFileContents, true);
+                            dd($array);
+                        }
+
+
 
                         return redirect()->action([PluginController::class, 'show']);
                     }
 
-                    session()->flash('errorPlugin', 'A plugin with name: "' . ucfirst($file_name) . '" already exist.');
+                    session()->flash('errorPlugin', 'A plugin with name: "' . $file_name . '" of: "' . $author . '" already exist.');
+                    return back();
                 }
             }
 
@@ -87,7 +119,7 @@ class PluginController extends Controller
         }
     }
 
-    private function installPlugin($pluginName)
+    private function installPlugin($author, $pluginName)
     {
         $provider = file(app_path('Http\Plugins\PluginProvider.php'), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         $flag = false;
@@ -104,6 +136,19 @@ class PluginController extends Controller
 
         if ($flag == false) {
             array_splice($provider, $positionInsert, 0, '        $calls->' . $pluginName . '();');
+        }
+
+        foreach ($provider as $key => $value) {
+            if ($value == "                //Automatic insert of Provider") {
+                $positionInsert = $key + 1;
+            }
+            if ($provider[$key] == '                app_path("\Http\Plugins\\\\' . $author . '\\\\" . $name  . "\\\\routes\web.php"),') {
+                $flag = true;
+            }
+        }
+
+        if ($flag == false) {
+            array_splice($provider, $positionInsert, 0, '                app_path("\Http\Plugins\\\\' . $author . '\\\\" . $name  . "\\\\routes\web.php"),');
         }
 
         $myfile = fopen(app_path('Http\Plugins\PluginProvider.php'), "w");
@@ -133,48 +178,58 @@ class PluginController extends Controller
             $description = $request->input('description');
             $author = $request->input('author');
             $email = $request->input('author-email');
-            $path = public_path('tmp/' . $name . '/');
+            $path = public_path('tmp/' . $author . '/');
 
             //create folder if doesn't exist
             if (!file_exists($path)) {
-                mkdir($path);
+                File::makeDirectory($path);
+            }
+
+            $path = public_path('tmp/' . $author . '/' . $name . '/');
+
+            //create folder if doesn't exist
+            if (!file_exists($path)) {
+                File::makeDirectory($path);
             } else {
                 //delete all content of folder
-                $files = glob($path . '*'); // get all file names
+                File::deleteDirectory($path);
+                /*$files = glob($path . '*'); // get all file names
                 foreach ($files as $file) { // iterate files
                     if (is_file($file)) {
                         unlink($file); // delete file
                     }
-                }
+                }*/
             }
 
             //funzioni che creano i diversi file
-            $this->createModelPlugin($path, $name);
-            $this->createControllerPlugin($path, $name);
-            $this->createRoutePlugin($path, $name);
+            $this->createModelPlugin($path, $author, $name);
+            $this->createControllerPlugin($path, $author, $name);
+            $this->createRoutePlugin($path, $author, $name);
             $this->createViewPlugin($path);
             $this->createReadmePlugin($path, $description);
             $this->createInfoPlugin($path, $name, $description, $author, $email);
 
             //una volta andato a buon fine creaiamo file zip
-            $this->zipPlugin($path, $name);
-            session()->flash('downloadPlugin', $name . "/" . $name . ".zip");
+            $path = public_path('tmp/' . $author . '/');
+            $this->zipPlugin($path, $author, $name);
+            session()->flash('downloadPlugin', $author . '/' . $author . "_" . $name . ".zip");
             return redirect()->action([PluginController::class, 'create']);
         } catch (\Exception $e) {
             //dd($e);
             //elimina la cartella creata in caso di errore
-            $this->rrmdir($path);
+            $path = public_path('tmp/' . $author . '/');
+            File::deleteDirectory($path);
             session()->flash('errorPlugin', 'An error occurred, retry please!');
             //session(['errorPlugin' => 'An error occurred, retry please!']);
             return back()->withInput();
         }
     }
 
-    private function zipPlugin($path, $name)
+    private function zipPlugin($path, $author, $name)
     {
         // Initialize archive object
         $zip = new ZipArchive();
-        $zip->open($path . $name . ".zip", ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        $zip->open($path . $author . '_' . $name . ".zip", ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
         // Create recursive directory iterator
         /** @var SplFileInfo[] $files */
@@ -184,7 +239,6 @@ class PluginController extends Controller
             // Get real and relative path for current file
             $filePath = $file->getRealPath();
             $relativePath = substr($filePath, strlen($path));
-
 
             if (!$file->isDir()) {
                 // Add current file to archive
@@ -199,65 +253,48 @@ class PluginController extends Controller
         $zip->close();
     }
 
-    //cancella direcotry con tutti i file
-    private function rrmdir($dir)
+    private function createModelPlugin($path, $author, $name)
     {
-        if (is_dir($dir)) {
-            $objects = scandir($dir);
-            foreach ($objects as $object) {
-                if ($object != "." && $object != "..") {
-                    if (filetype($dir . "/" . $object) == "dir")
-                        $this->rrmdir($dir . "/" . $object);
-                    else unlink($dir . "/" . $object);
-                }
-            }
-            reset($objects);
-            rmdir($dir);
-        }
-    }
-
-    private function createModelPlugin($path, $name)
-    {
-        //create file and insert text
-        $myfile = fopen($path . ucfirst($name) . ".php", "w");
-        $txt = "<?php
+        $myfile = $path . "\\" . $name . ".php";
+        $txt = '<?php
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class " . ucfirst($name) . " extends Model
+class ' . $name . ' extends Model
 {
     use HasFactory;
-}";
-        fwrite($myfile, $txt);
-        fclose($myfile);
+
+    protected $table = "' . $author . '_' . $name . '";
+}';
+        File::put($myfile, $txt);
     }
 
-    private function createControllerPlugin($path, $name)
+    private function createControllerPlugin($path, $author, $name)
     {
         //creating contoller
         //create folder if doesn't exist
         $path = $path . "Controller/";
         if (!file_exists($path)) {
-            mkdir($path);
+            File::makeDirectory($path);
         }
 
         //create file and insert text
-        $myfile = fopen($path . "Controller" . ucfirst($name) . ".php", "w");
+        $myfile = $path . "Controller" . $name . ".php";
         $txt = '<?php
 
-namespace App\Http\Plugins\\' . ucfirst($name) . '\Controller;
+namespace App\Http\Plugins\\' . $author . '\\' . $name . '\Controller;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\PluginController;
 
-class Controller' . ucfirst($name) . ' extends PluginController
+class Controller' . $name . ' extends PluginController
 {
     private function views($page)
     {
-        return PluginController::pluginPage("' . ucfirst($name) . '\\\views\\\" . $page);
+        return PluginController::pluginPage("' . $author . '\\' . $name . '\\\views\\\" . $page);
     }
 
     public function index()
@@ -265,30 +302,29 @@ class Controller' . ucfirst($name) . ' extends PluginController
     	return $this->views("index");
     }
 }';
-        fwrite($myfile, $txt);
-        fclose($myfile);
+        File::put($myfile, $txt);
     }
 
-    private function createRoutePlugin($path, $name)
+    private function createRoutePlugin($path, $author, $name)
     {
         //creating routes
         //create folder if doesn't exist
         $path = $path . "routes/";
         if (!file_exists($path)) {
-            mkdir($path);
+            File::makeDirectory($path);
         }
 
         //create file and insert text
-        $myfile = fopen($path . "web.php", "w");
+        $myfile = $path . "web.php";
         $txt = "<?php
-namespace App\Http" . ucfirst($name) . "\Plugins;
+namespace App\Http\Plugins;
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Plugins\\" . ucfirst($name) . "\Controller\Controller" . ucfirst($name) . ";
+use App\Http\Plugins\\" . $author . '\\' . $name . "\Controller\Controller" . $name . ";
 
-Route::get('/" . $name . "/example', [Controller" . ucfirst($name) . "::class, 'index']);";
-        fwrite($myfile, $txt);
-        fclose($myfile);
+Route::get('/" . $author . '/' . $name . "/', [Controller" . $name . "::class, 'index']);";
+
+        File::put($myfile, $txt);
     }
 
     private function createViewPlugin($path)
@@ -297,11 +333,11 @@ Route::get('/" . $name . "/example', [Controller" . ucfirst($name) . "::class, '
         //create folder if doesn't exist
         $path = $path . "views/";
         if (!file_exists($path)) {
-            mkdir($path);
+            File::makeDirectory($path);
         }
 
         //create file and insert text
-        $myfile = fopen($path . "index.blade.php", "w");
+        $myfile = $path . "index.blade.php";
         $txt = '@extends("backend.app")
 
 @section("content")
@@ -396,17 +432,16 @@ Route::get('/" . $name . "/example', [Controller" . ucfirst($name) . "::class, '
 @section("script")
     //javascript code without tag <script></script>
 @endsection';
-        fwrite($myfile, $txt);
-        fclose($myfile);
+
+        File::put($myfile, $txt);
     }
 
     private function createReadmePlugin($path, $description)
     {
         //creating README
         //create folder if doesn't exist
-        $myfile = fopen($path . "README.md", "w");
-        fwrite($myfile, $description);
-        fclose($myfile);
+        $myfile = $path . "README.md";
+        File::put($myfile, $description);
     }
 
     private function createInfoPlugin($path, $name, $description, $author, $email)
@@ -420,8 +455,7 @@ Route::get('/" . $name . "/example', [Controller" . ucfirst($name) . "::class, '
             "email" => $email,
         );
 
-        $myfile = fopen($path . "info.json", "w");
-        fwrite($myfile, json_encode($array));
-        fclose($myfile);
+        $myfile = $path . "info.json";
+        File::put($myfile, json_encode($array));
     }
 }
