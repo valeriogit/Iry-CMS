@@ -23,13 +23,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="{{ asset('css/sweetalert2/bootstrap-4.min.css') }}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-  <!-- DataTables -->
-  <link rel="stylesheet" href="{{ asset('css/datatables-bs4/dataTables.bootstrap4.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/datatables-responsive/responsive.bootstrap4.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/datatables-buttons/buttons.bootstrap4.min.css') }}">
-  <!-- Sweet Alert -->
+    <!-- Sweet Alert -->
   <link rel="stylesheet" href="{{ asset('css/sweetalert2/bootstrap-4.min.css') }}">
   <link rel="stylesheet" href="{{ asset('css/backend/backend.css') }}">
+  @yield('css')
 </head>
 <body class="hold-transition sidebar-mini layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
@@ -120,6 +117,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
+            <a href="{{ action('BackendController@index') }}" class="nav-link parent-hover-animation @if($activePage=='settings') active @endif">
+                <i class="nav-icon shake-icon fas fa-cogs "></i>
+              <p>
+                Settings
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="{{ action('PluginController@show') }}" class="nav-link parent-hover-animation @if($activePage=='plugin') active @endif">
                 <i class="nav-icon shake-icon fas fa-puzzle-piece "></i>
               <p>
@@ -127,7 +132,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
           </li>
-          @yield('menu')
+          @foreach ($menu as $item)
+          <li class="nav-item">
+            <a href="{{ $item->url }}" class="nav-link parent-hover-animation @if($activePage==$item->slug) active @endif">
+                <i class="nav-icon shake-icon {{ $item->icon }} "></i>
+              <p>
+                {{$item->name}}
+              </p>
+            </a>
+          </li>
+          @endforeach
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -161,17 +175,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script src="{{ asset('js/adminlte/adminlte.min.js') }}"></script>
   <!-- Sweet Alert -->
   <script src="{{ asset('js/sweetalert2/sweetalert2.min.js') }}"></script>
-  <!-- DataTables  & Plugins -->
-  <script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
-  <script src="{{ asset('js/datatables-bs4/dataTables.bootstrap4.min.js') }}"></script>
-  <script src="{{ asset('js/datatables-responsive/dataTables.responsive.min.js') }}"></script>
-  <script src="{{ asset('js/datatables-responsive/responsive.bootstrap4.min.js') }}"></script>
-  <script src="{{ asset('js/datatables-buttons/dataTables.buttons.min.js') }}"></script>
-  <script src="{{ asset('js/datatables-buttons/buttons.bootstrap4.min.js') }}"></script>
-  <!-- Sweet Alert -->
-  <script src="{{ asset('js/sweetalert2/sweetalert2.min.js') }}"></script>
   <!-- bs-custom-file-input -->
   <script src="{{ asset('js/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+  @yield('js')
 
   <script type="text/javascript">
     function checkUpdate()

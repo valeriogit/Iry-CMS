@@ -8,12 +8,14 @@ class PluginProvider extends ServiceProvider
     {
         $calls = new PluginProvider('');
         //Automatic insert of Provider
+        $calls->prova();
     }
     public function __call($name, $arguments)
     {
         return Route::middleware('web')
             ->group(
                 //Automatic insert of Provider
+                app_path("\Http\Plugins\\valerio\\" . $name  . "\\routes\web.php"),
             );
     }
 }

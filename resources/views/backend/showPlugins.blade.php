@@ -4,6 +4,13 @@
   <title>{{ $config->nameSite }} - Plugin List</title>
 @endsection
 
+@section('css')
+<!-- DataTables -->
+<link rel="stylesheet" href="{{ asset('css/datatables-bs4/dataTables.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('css/datatables-responsive/responsive.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('css/datatables-buttons/buttons.bootstrap4.min.css') }}">
+@endsection
+
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -51,9 +58,9 @@
                             <td>{{ $plugin->author_email }}</td>
                             <td>{{ $plugin->created_at }}</td>
                             <td>
-                                <a href="">Download</a>
-                                <a href="">Modify</a>
-                                <a href="">Delete</a>
+                                <a href="{{ action('PluginController@delete', $plugin->id) }}" class="float-right mr-2"><button type="button" class="btn btn-block btn-danger">Delete</button></a>
+                                <a href="{{ action('PluginController@modify', $plugin->id) }}" class="float-right mr-2"><button type="button" class="btn btn-block btn-warning">Modify</button></a>
+                                <a href="{{ action('PluginController@downloadZip', $plugin->id) }}" class="float-right mr-2"><button type="button" class="btn btn-block btn-info">Download</button></a>
                             </td>
                         </tr>
                     @endforeach
@@ -75,6 +82,16 @@
   <!-- /.content-wrapper -->
 @endsection
 
+@section('js')
+<!-- DataTables  & Plugins -->
+<script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('js/datatables-bs4/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('js/datatables-responsive/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('js/datatables-responsive/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('js/datatables-buttons/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('js/datatables-buttons/buttons.bootstrap4.min.js') }}"></script>
+@endsection
+
 @section('script')
     $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false
@@ -91,6 +108,34 @@
         Toast.fire({
             icon: 'success',
             title: '&nbsp;&nbsp;&nbsp;Plugin installed successfully!'
+        })
+    @endif
+
+    @if(session()->has('deletedSuccessPlugin'))
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'center',
+            showConfirmButton: false,
+            timer: 3000
+        });
+
+        Toast.fire({
+            icon: 'success',
+            title: '&nbsp;&nbsp;&nbsp;Plugin deleted successfully!'
+        })
+    @endif
+
+    @if(session()->has('deletedFailPlugin'))
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'center',
+            showConfirmButton: false,
+            timer: 3000
+        });
+
+        Toast.fire({
+            icon: 'error',
+            title: '&nbsp;&nbsp;&nbsp;Plugin deleted error!'
         })
     @endif
 @endsection

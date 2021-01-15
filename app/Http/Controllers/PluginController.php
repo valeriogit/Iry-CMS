@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\DB;
 use ZipArchive;
 
 use App\Models\Configuration;
 use App\Models\Plugin;
-use Illuminate\Support\Facades\File;
+use App\Models\Menu;
+use App\Models\MenuList;
+use App\Models\MenuVoice;
+
 
 class PluginController extends Controller
 {
@@ -17,14 +23,23 @@ class PluginController extends Controller
         //we call this funciont from plugin for make views
         //and we call in this controller too
         $config = Configuration::first();
+        $menu = DB::table('menu')->join('menuvoice', 'menu.idMenuVoice', '=', 'menuvoice.id')->select('menuvoice.name', 'menuvoice.url', 'menuvoice.slug', 'menuvoice.icon')->get();
 
         return View::make($page)
             ->with('config', $config)
-            ->with('activePage', $activePage);
+            ->with('activePage', $activePage)
+            ->with('menu', $menu);
     }
 
     public function show()
     {
+        if(!session()->has('downloadPlugin')){
+            $path = public_path('tmp/');
+            if (file_exists($path)) {
+                File::cleanDirectory($path);
+            }
+        }
+
         $plugins = Plugin::all();
 
         return $this->pluginPage('backend.showPlugins', 'plugin')
@@ -102,6 +117,20 @@ class PluginController extends Controller
                             $plugin->description = $array["description"];
                             $plugin->author = $array["author"];
                             $plugin->author_email = $array["email"];
+
+                            $menuList = MenuList::find(1);
+
+                            $menuVoice = new MenuVoice;
+                            $menuVoice->name = $array["menuVoice"];
+                            $menuVoice->url = $array["menuLink"];
+                            $menuVoice->icon = $array["menuIcon"];
+                            $menuVoice->slug = $array["author"]."_".$array["name"];
+                            $menuVoice->save();
+
+                            $menu = new Menu;
+                            $menu->idMenuList = $menuList->id;
+                            $menu->idMenuVoice = $menuVoice->id;
+                            $menu->save();
                         }
                         else{
                             $plugin->name = $file_name;
@@ -163,9 +192,231 @@ class PluginController extends Controller
         $myfile = fopen(app_path('Http\Plugins\PluginProvider.php'), "w");
         $provider = implode("\n", $provider);
         $txt = $provider;
+
         fwrite($myfile, $txt);
         fclose($myfile);
     }
+
+    public function delete($id){
+        try{
+            $plugin = Plugin::find($id);
+
+            if($plugin){
+                $path = app_path('Http\Plugins\\'.$plugin->author.'\\'.$plugin->name);
+                if (file_exists($path)) {
+                    File::deleteDirectory($path);
+
+                    $path = app_path('Http\Plugins\\'.$plugin->author);
+
+                    if ($this->is_dir_empty($path)) {
+                        //the folder is empty"
+                        File::deleteDirectory($path);
+                    }
+                }
+
+                $this->removeFromFile($plugin->author, $plugin->name, $plugin->id);
+                $plugin->delete();
+
+                $menuList = MenuList::find(1);
+
+                $menuVoice = MenuVoice::where('slug', '=', $plugin->author.'_'.$plugin->name)->first();
+                $menu = Menu::where('idMenuVoice', '=', $menuVoice->id)->delete();
+                $menuVoice->delete();
+
+                session()->flash('deletedSuccessPlugin', 'deleted');
+                return redirect()->action([PluginController::class, 'show']);
+
+            }
+
+            session()->flash('deletedFailPlugin', 'deleted');
+            return redirect()->action([PluginController::class, 'show']);
+
+        }catch(\Exception $e){
+            //dd($e);
+        }
+    }
+
+    private function is_dir_empty($dir) {
+        if (!is_readable($dir)) return NULL;
+        return (count(scandir($dir)) == 2);
+    }
+
+    private function removeFromFile($author, $pluginName, $pluginId){
+        $provider = file(app_path('Http\Plugins\PluginProvider.php'), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $flag = false;
+        $positionInsert = "";
+
+        foreach ($provider as $key => $value) {
+            if ($value == '        $calls->' . $pluginName . '();') {
+                $positionInsert = $key;
+            }
+        }
+
+        if ($positionInsert != "") {
+            unset($provider[$positionInsert]);
+        }
+
+        $plugins = Plugin::where('author', '=', $author)->where('id','<>', $pluginId)->first();
+
+        if(!$plugins){
+            $positionInsert = "";
+            foreach ($provider as $key => $value) {
+                if ($value == '                app_path("\Http\Plugins\\\\' . $author . '\\\\" . $name  . "\\\\routes\web.php"),') {
+                    $positionInsert = $key;
+                }
+            }
+
+            if ($positionInsert != "") {
+                unset($provider[$positionInsert]);
+            }
+        }
+
+        $myfile = fopen(app_path('Http\Plugins\PluginProvider.php'), "w");
+        $provider = implode("\n", $provider);
+        $txt = $provider;
+        fwrite($myfile, $txt);
+        fclose($myfile);
+    }
+
+    public function downloadZip($id){
+        $plugin = Plugin::find($id);
+
+        $path = app_path('Http/Plugins/' . $plugin->author.'/');
+        $this->zipPlugin($path, $plugin->author, $plugin->name);
+
+        $file_name = $plugin->author."_".$plugin->name.".zip";
+        $dest = public_path('tmp/'.$file_name);
+        File::move($path.$file_name, $dest);
+
+        session()->flash('downloadPlugin', $file_name   );
+        return redirect()->action([PluginController::class, 'show']);
+    }
+
+    public function modify(Request $request, $id)
+    {
+        try{
+            $plugin = Plugin::find($id);
+
+            $file = $plugin->name.".php";
+            $path = app_path('Http\Plugins\\');
+
+            if ($request->has('file')) {
+                $file = $request->file;
+                $content = File::get($path.$file);
+            }
+            else{
+                $path = app_path('Http\Plugins\\'.$plugin->author.'\\'.$plugin->name);
+                $content = File::get($path.'\\'.$file);
+            }
+
+            $path = app_path('Http\Plugins\\'.$plugin->author.'\\'.$plugin->name);
+
+            //$content = Blade::compileString($content);
+
+            //$code = $this->php_file_tree($path, "javascript:alert('You clicked on [link]');");
+            $allowed_extensions = array("php", "css", "js", "json", "md", "html");
+            $code = $this->php_file_tree($path, "?file=[link]", $allowed_extensions);
+
+            return $this->pluginPage('backend.modifyPlugin', 'plugin')
+                ->with('content', $content)
+                ->with('code', $code)
+                ->with('id', $plugin->id);
+        }
+        catch(\Exception $e){
+            //dd($e);
+            return back();
+        }
+    }
+
+    private function php_file_tree($directory, $return_link, $extensions = array()) {
+        // Generates a valid XHTML list of all directories, sub-directories, and files in $directory
+        // Remove trailing slash
+        if( substr($directory, -1) == "/" ) $directory = substr($directory, 0, strlen($directory) - 1);
+        $code = $this->php_file_tree_dir($directory, $return_link, $extensions);
+
+        return $code;
+    }
+
+    private function php_file_tree_dir($directory, $return_link, $extensions = array(), $first_call = true) {
+        // Recursive function called by php_file_tree() to list directories/files
+        $php_file_tree = "";
+        // Get and sort directories/files
+        $file = scandir($directory);
+        natcasesort($file);
+        // Make directories first
+        $files = $dirs = array();
+        foreach($file as $this_file) {
+            if( is_dir("$directory/$this_file" ) ) $dirs[] = $this_file; else $files[] = $this_file;
+        }
+        $file = array_merge($dirs, $files);
+
+        // Filter unwanted extensions
+        if( !empty($extensions) ) {
+            foreach( array_keys($file) as $key ) {
+                if( !is_dir("$directory/$file[$key]") ) {
+                    $ext = substr($file[$key], strrpos($file[$key], ".") + 1);
+                    if( !in_array($ext, $extensions) ) unset($file[$key]);
+                }
+            }
+        }
+
+        if( count($file) > 2 ) { // Use 2 instead of 0 to account for . and .. "directories"
+            $php_file_tree = "<ul";
+            if( $first_call ) { $php_file_tree .= " class=\"php-file-tree\""; $first_call = false; }
+            $php_file_tree .= ">";
+            foreach( $file as $this_file ) {
+                if( $this_file != "." && $this_file != ".." ) {
+                    if( is_dir("$directory/$this_file") ) {
+                        // Directory
+                        $php_file_tree .= "<li class=\"pft-directory\"><a href=\"#\">" . htmlspecialchars($this_file) . "</a>";
+                        $php_file_tree .= $this->php_file_tree_dir("$directory/$this_file", $return_link ,$extensions, false);
+                        $php_file_tree .= "</li>";
+                    } else {
+                        // File
+                        // Get extension (prepend 'ext-' to prevent invalid classes from extensions that begin with numbers)
+                        $ext = "ext-" . substr($this_file, strrpos($this_file, ".") + 1);
+                        $link = str_replace("[link]", "$directory/" . urlencode($this_file), $return_link);
+                        $link = str_replace(app_path('Http\Plugins\\'), "", $link);
+                        $php_file_tree .= "<li class=\"pft-file " . strtolower($ext) . "\"><a href=\"$link\">" . htmlspecialchars($this_file) . "</a></li>";
+                    }
+                }
+            }
+            $php_file_tree .= "</ul>";
+        }
+        return $php_file_tree;
+    }
+
+    public function saveModify(Request $request, $id)
+    {
+        if($request->has('file') && $request->has('content')){
+            try{
+                $file = $request->file;
+                $content = $request->content;
+
+                $plugin = Plugin::find($id);
+
+                if($file == null || $file == ""){
+                    $file = $plugin->author.'\\'.$plugin->name.'\\'.$plugin->name.".php";
+                }
+
+                $path = app_path('Http\Plugins\\');
+                File::put($path.$file, $content);
+
+                return response()->json(['code' => 'success', 'state' => 'Success', 'message' => 'Successfully saved']);
+            }
+            catch (\Exception $e){
+                dd($e);
+                return response()->json(['code' => 'error', 'state' => 'Fail', 'message' => 'Save failed']);
+            }
+        }
+
+        return response()->json(['code' => 'error', 'state' => 'Fail', 'message' => 'Save failed']);
+    }
+
+
+
+
+
 
 
 
@@ -325,7 +576,9 @@ namespace App\Http\Plugins;
 use Illuminate\Support\Facades\Route;
 use App\Http\Plugins\\" . $author . '\\' . $name . "\Controller\Controller" . $name . ";
 
-Route::get('/" . $author . '/' . $name . "/', [Controller" . $name . "::class, 'index']);";
+//If you want a frontend link remove /admin
+
+Route::get('/admin/" . $author . '/' . $name . "/', [Controller" . $name . "::class, 'index']);";
 
         File::put($myfile, $txt);
     }
@@ -342,6 +595,14 @@ Route::get('/" . $author . '/' . $name . "/', [Controller" . $name . "::class, '
         //create file and insert text
         $myfile = $path . "index.blade.php";
         $txt = '@extends("backend.app")
+
+@section(\'title\')
+    <title>{{ $config->nameSite }} - Title Page</title>
+@endsection
+
+@section(\'css\')
+    <!-- Your css files -->
+@endsection
 
 @section("content")
     <!-- Content Wrapper. Contains page content -->
@@ -432,6 +693,10 @@ Route::get('/" . $author . '/' . $name . "/', [Controller" . $name . "::class, '
     <!-- /.content-wrapper -->
 @endsection
 
+@section(\'js\')
+    <!-- Your JS files -->
+@endsection
+
 @section("script")
     //javascript code without tag <script></script>
 @endsection';
@@ -456,6 +721,9 @@ Route::get('/" . $author . '/' . $name . "/', [Controller" . $name . "::class, '
             "description" => $description,
             "author" => $author,
             "email" => $email,
+            "menuVoice" => $name,
+            "menuLink" => '/admin/' . $author . '/' . $name . '/',
+            "menuIcon" => "fas fa-bars"
         );
 
         $myfile = $path . "info.json";

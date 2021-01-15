@@ -27,4 +27,8 @@ Route::group(['prefix' => 'admin',  'middleware' => 'isAdmin'], function()
     Route::post('/plugins/create', [PluginController::class, 'save']);
     Route::get('/plugins/upload', [PluginController::class, 'upload']);
     Route::post('/plugins/upload', [PluginController::class, 'uploaded']);
+    Route::get('/plugins/delete/{id}', [PluginController::class, 'delete']);
+    Route::get('/plugins/download/{id}', [PluginController::class, 'downloadZip']);
+    Route::get('/plugins/modify/{id}', [PluginController::class, 'modify']);
+    Route::post('/plugins/modify/{id}', [PluginController::class, 'saveModify']);
 });

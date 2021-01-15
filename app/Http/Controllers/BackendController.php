@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use ZipArchive;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Configuration;
+use App\Models\Menu;
+use App\Models\MenuList;
+use App\Models\MenuVoice;
 
 class BackendController extends Controller
 {
@@ -16,6 +20,7 @@ class BackendController extends Controller
     {
         $this->config = Configuration::first();
         $this->activePage = "admin";
+        $this->menu = DB::table('menu')->join('menuvoice', 'menu.idMenuVoice', '=', 'menuvoice.id')->select('menuvoice.name', 'menuvoice.url', 'menuvoice.slug', 'menuvoice.icon')->get();
     }
 
     public function checkUpdate()
@@ -102,7 +107,8 @@ class BackendController extends Controller
     {
             return view('backend.content')
                 ->with('config', $this->config)
-                ->with('activePage', $this->activePage);
+                ->with('activePage', $this->activePage)
+                ->with('menu', $this->menu);
 
     }
 }
