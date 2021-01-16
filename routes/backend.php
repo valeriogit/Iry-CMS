@@ -22,6 +22,12 @@ Route::group(['prefix' => 'admin',  'middleware' => 'isAdmin'], function()
     Route::get('/update', [BackendController::class, 'checkUpdate']);
     Route::post('/update', [BackendController::class, 'takeUpdate']);
 
+    /* Settings route */
+    Route::get('/settings', [SettingsController::class, 'index']);
+    Route::post('/settings/saveInfoSettings', [SettingsController::class, 'saveInfoSettings']);
+    Route::post('/settings/saveRecaptchaSettings', [SettingsController::class, 'saveRecaptchaSettings']);
+
+    /* Plugin Route */
     Route::get('/plugins', [PluginController::class, 'show']);
     Route::get('/plugins/create', [PluginController::class, 'create']);
     Route::post('/plugins/create', [PluginController::class, 'save']);
@@ -32,3 +38,19 @@ Route::group(['prefix' => 'admin',  'middleware' => 'isAdmin'], function()
     Route::get('/plugins/modify/{id}', [PluginController::class, 'modify']);
     Route::post('/plugins/modify/{id}', [PluginController::class, 'saveModify']);
 });
+
+/* Route for load css & js from plugin directory */
+Route::get('/assets/{author}/{plugin}/{folder}/{file}', [ function ($author, $plugin, $folder, $file) {
+
+    $path = app_path("Http/Plugins/$author/$plugin/resources/$folder/$file");
+
+    if (\File::exists($path)) {
+        if($folder == 'js'){
+            return response()->file($path, array('Content-Type' => 'application/javascript'));
+        }else{
+            return response()->file($path, array('Content-Type' => 'text/css'));
+        }
+    }
+
+    return response()->json([ ], 404);
+}]);

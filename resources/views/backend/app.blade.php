@@ -114,7 +114,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ action('BackendController@index') }}" class="nav-link parent-hover-animation @if($activePage=='settings') active @endif">
+            <a href="{{ action('SettingsController@index') }}" class="nav-link parent-hover-animation @if($activePage=='settings') active @endif">
                 <i class="nav-icon shake-icon fas fa-cogs "></i>
               <p>
                 Settings
