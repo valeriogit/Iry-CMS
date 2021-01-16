@@ -1277,17 +1277,17 @@
     },
     {
         "name": "laravel/framework",
-        "version": "v8.21.0",
-        "version_normalized": "8.21.0.0",
+        "version": "v8.22.1",
+        "version_normalized": "8.22.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/laravel/framework.git",
-            "reference": "a61cab167c35f465a923737ee6e6fb99cd5fde88"
+            "reference": "5c70991b96c5722afed541a996479b5112654c8b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/laravel/framework/zipball/a61cab167c35f465a923737ee6e6fb99cd5fde88",
-            "reference": "a61cab167c35f465a923737ee6e6fb99cd5fde88",
+            "url": "https://api.github.com/repos/laravel/framework/zipball/5c70991b96c5722afed541a996479b5112654c8b",
+            "reference": "5c70991b96c5722afed541a996479b5112654c8b",
             "shasum": ""
         },
         "require": {
@@ -1400,7 +1400,7 @@
             "symfony/psr-http-message-bridge": "Required to use PSR-7 bridging features (^2.0).",
             "wildbit/swiftmailer-postmark": "Required to use Postmark mail driver (^3.0)."
         },
-        "time": "2021-01-05T15:43:10+00:00",
+        "time": "2021-01-13T13:37:56+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2116,17 +2116,17 @@
     },
     {
         "name": "nunomaduro/collision",
-        "version": "v5.1.0",
-        "version_normalized": "5.1.0.0",
+        "version": "v5.2.0",
+        "version_normalized": "5.2.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/nunomaduro/collision.git",
-            "reference": "7c2b95589bf81e274e61e47f7672a1b2c3e06eaa"
+            "reference": "aca954fd03414ba0dd85d7d8e42ba9b251893d1f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/nunomaduro/collision/zipball/7c2b95589bf81e274e61e47f7672a1b2c3e06eaa",
-            "reference": "7c2b95589bf81e274e61e47f7672a1b2c3e06eaa",
+            "url": "https://api.github.com/repos/nunomaduro/collision/zipball/aca954fd03414ba0dd85d7d8e42ba9b251893d1f",
+            "reference": "aca954fd03414ba0dd85d7d8e42ba9b251893d1f",
             "shasum": ""
         },
         "require": {
@@ -2136,18 +2136,18 @@
             "symfony/console": "^5.0"
         },
         "require-dev": {
-            "fideloper/proxy": "^4.4.0",
-            "friendsofphp/php-cs-fixer": "^2.16.4",
-            "fruitcake/laravel-cors": "^2.0.1",
-            "laravel/framework": "^8.0",
-            "laravel/tinker": "^2.4.1",
+            "brianium/paratest": "^6.1",
+            "fideloper/proxy": "^4.4.1",
+            "friendsofphp/php-cs-fixer": "^2.17.3",
+            "fruitcake/laravel-cors": "^2.0.3",
+            "laravel/framework": "^9.0",
             "nunomaduro/larastan": "^0.6.2",
             "nunomaduro/mock-final-classes": "^1.0",
-            "orchestra/testbench": "^6.0",
-            "phpstan/phpstan": "^0.12.36",
-            "phpunit/phpunit": "^9.3.3"
+            "orchestra/testbench": "^7.0",
+            "phpstan/phpstan": "^0.12.64",
+            "phpunit/phpunit": "^9.5.0"
         },
-        "time": "2020-10-29T14:50:40+00:00",
+        "time": "2021-01-13T10:00:08+00:00",
         "type": "library",
         "extra": {
             "laravel": {
@@ -4574,17 +4574,17 @@
     },
     {
         "name": "swiftmailer/swiftmailer",
-        "version": "v6.2.4",
-        "version_normalized": "6.2.4.0",
+        "version": "v6.2.5",
+        "version_normalized": "6.2.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/swiftmailer/swiftmailer.git",
-            "reference": "56f0ab23f54c4ccbb0d5dcc67ff8552e0c98d59e"
+            "reference": "698a6a9f54d7eb321274de3ad19863802c879fb7"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/56f0ab23f54c4ccbb0d5dcc67ff8552e0c98d59e",
-            "reference": "56f0ab23f54c4ccbb0d5dcc67ff8552e0c98d59e",
+            "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/698a6a9f54d7eb321274de3ad19863802c879fb7",
+            "reference": "698a6a9f54d7eb321274de3ad19863802c879fb7",
             "shasum": ""
         },
         "require": {
@@ -4601,7 +4601,7 @@
         "suggest": {
             "ext-intl": "Needed to support internationalized email addresses"
         },
-        "time": "2020-12-08T18:02:06+00:00",
+        "time": "2021-01-12T09:35:59+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -5581,17 +5581,17 @@
     },
     {
         "name": "symfony/polyfill-iconv",
-        "version": "v1.20.0",
-        "version_normalized": "1.20.0.0",
+        "version": "v1.22.0",
+        "version_normalized": "1.22.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-iconv.git",
-            "reference": "c536646fdb4f29104dd26effc2fdcb9a5b085024"
+            "reference": "b34bfb8c4c22650ac080d2662ae3502e5f2f4ae6"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-iconv/zipball/c536646fdb4f29104dd26effc2fdcb9a5b085024",
-            "reference": "c536646fdb4f29104dd26effc2fdcb9a5b085024",
+            "url": "https://api.github.com/repos/symfony/polyfill-iconv/zipball/b34bfb8c4c22650ac080d2662ae3502e5f2f4ae6",
+            "reference": "b34bfb8c4c22650ac080d2662ae3502e5f2f4ae6",
             "shasum": ""
         },
         "require": {
@@ -5600,11 +5600,11 @@
         "suggest": {
             "ext-iconv": "For best performance"
         },
-        "time": "2020-10-23T14:02:19+00:00",
+        "time": "2021-01-07T16:49:33+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-main": "1.20-dev"
+                "dev-main": "1.22-dev"
             },
             "thanks": {
                 "name": "symfony/polyfill",
@@ -5740,17 +5740,17 @@
     },
     {
         "name": "symfony/polyfill-intl-idn",
-        "version": "v1.20.0",
-        "version_normalized": "1.20.0.0",
+        "version": "v1.22.0",
+        "version_normalized": "1.22.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-intl-idn.git",
-            "reference": "3b75acd829741c768bc8b1f84eb33265e7cc5117"
+            "reference": "0eb8293dbbcd6ef6bf81404c9ce7d95bcdf34f44"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/3b75acd829741c768bc8b1f84eb33265e7cc5117",
-            "reference": "3b75acd829741c768bc8b1f84eb33265e7cc5117",
+            "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/0eb8293dbbcd6ef6bf81404c9ce7d95bcdf34f44",
+            "reference": "0eb8293dbbcd6ef6bf81404c9ce7d95bcdf34f44",
             "shasum": ""
         },
         "require": {
@@ -5761,11 +5761,11 @@
         "suggest": {
             "ext-intl": "For best performance"
         },
-        "time": "2020-10-23T14:02:19+00:00",
+        "time": "2021-01-07T16:49:33+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-main": "1.20-dev"
+                "dev-main": "1.22-dev"
             },
             "thanks": {
                 "name": "symfony/polyfill",
@@ -5988,27 +5988,27 @@
     },
     {
         "name": "symfony/polyfill-php72",
-        "version": "v1.20.0",
-        "version_normalized": "1.20.0.0",
+        "version": "v1.22.0",
+        "version_normalized": "1.22.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-php72.git",
-            "reference": "cede45fcdfabdd6043b3592e83678e42ec69e930"
+            "reference": "cc6e6f9b39fe8075b3dabfbaf5b5f645ae1340c9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/cede45fcdfabdd6043b3592e83678e42ec69e930",
-            "reference": "cede45fcdfabdd6043b3592e83678e42ec69e930",
+            "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/cc6e6f9b39fe8075b3dabfbaf5b5f645ae1340c9",
+            "reference": "cc6e6f9b39fe8075b3dabfbaf5b5f645ae1340c9",
             "shasum": ""
         },
         "require": {
             "php": ">=7.1"
         },
-        "time": "2020-10-23T14:02:19+00:00",
+        "time": "2021-01-07T16:49:33+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-main": "1.20-dev"
+                "dev-main": "1.22-dev"
             },
             "thanks": {
                 "name": "symfony/polyfill",
