@@ -6,6 +6,7 @@
 
 @section('css')
     <!-- Your css files -->
+    <link rel="stylesheet" href="{{ URL::to('/assets/valerio/prova/css/main.css') }}">
 @endsection
 
 @section("content")
@@ -99,6 +100,7 @@
 
 @section('js')
     <!-- Your JS files -->
+    <script src="{{ URL::to('/assets/valerio/prova/js/main.js') }}"></script>
 @endsection
 
 @section("script")

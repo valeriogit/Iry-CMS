@@ -48,6 +48,13 @@ class PluginController extends Controller
 
     public function create()
     {
+        if(!session()->has('downloadPlugin')){
+            $path = public_path('tmp/');
+            if (file_exists($path)) {
+                File::cleanDirectory($path);
+            }
+        }
+
         return $this->pluginPage('backend.createPlugin', 'plugin');
     }
 
@@ -459,7 +466,8 @@ class PluginController extends Controller
             $this->createModelPlugin($path, $author, $name);
             $this->createControllerPlugin($path, $author, $name);
             $this->createRoutePlugin($path, $author, $name);
-            $this->createViewPlugin($path);
+            $this->createViewPlugin($path, $author, $name);
+            $this->createAssetsPlugin($path);
             $this->createReadmePlugin($path, $description);
             $this->createInfoPlugin($path, $name, $description, $author, $email);
 
@@ -583,7 +591,7 @@ Route::get('/admin/" . $author . '/' . $name . "/', [Controller" . $name . "::cl
         File::put($myfile, $txt);
     }
 
-    private function createViewPlugin($path)
+    private function createViewPlugin($path, $author, $name)
     {
         //creating views
         //create folder if doesn't exist
@@ -602,6 +610,7 @@ Route::get('/admin/" . $author . '/' . $name . "/', [Controller" . $name . "::cl
 
 @section(\'css\')
     <!-- Your css files -->
+    <link rel="stylesheet" href="{{ URL::to(\'/assets/'.$author.'/'.$name.'/css/main.css\') }}">
 @endsection
 
 @section("content")
@@ -695,6 +704,7 @@ Route::get('/admin/" . $author . '/' . $name . "/', [Controller" . $name . "::cl
 
 @section(\'js\')
     <!-- Your JS files -->
+    <script src="{{ URL::to(\'/assets/'.$author.'/'.$name.'/js/main.js\') }}"></script>
 @endsection
 
 @section("script")
@@ -702,6 +712,34 @@ Route::get('/admin/" . $author . '/' . $name . "/', [Controller" . $name . "::cl
 @endsection';
 
         File::put($myfile, $txt);
+    }
+
+    private function createAssetsPlugin($path)
+    {
+        //creating views
+        //create folder if doesn't exist
+        $path = $path.'resources/';
+        if (!file_exists($path)) {
+            File::makeDirectory($path);
+        }
+
+        $cssPath = $path . "css/";
+        if (!file_exists($cssPath)) {
+            File::makeDirectory($cssPath);
+        }
+
+        //create file and insert text
+        $myfile = $cssPath . "main.css";
+        File::put($myfile, '');
+
+        $jsPath = $path . "js/";
+        if (!file_exists($jsPath)) {
+            File::makeDirectory($jsPath);
+        }
+
+        //create file and insert text
+        $myfile = $jsPath . "main.js";
+        File::put($myfile, '');
     }
 
     private function createReadmePlugin($path, $description)
