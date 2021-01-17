@@ -708,7 +708,9 @@ Route::get('/admin/" . $author . '/' . $name . "/', [Controller" . $name . "::cl
 @endsection
 
 @section("script")
-    //javascript code without tag <script></script>
+    <script>
+        //javascript code
+    </script>
 @endsection';
 
         File::put($myfile, $txt);

@@ -68,21 +68,23 @@
 @endsection
 
 @section('script')
-    @if(session()->has('errorPlugin'))
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'center',
-            showConfirmButton: false,
-            timer: 3000
-            });
+    <script>
+        @if(session()->has('errorPlugin'))
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'center',
+                showConfirmButton: false,
+                timer: 3000
+                });
 
-        Toast.fire({
-            icon: 'error',
-            title: '&nbsp;&nbsp;&nbsp;{!! session('errorPlugin') !!}'
-        })
-    @endif
+            Toast.fire({
+                icon: 'error',
+                title: '&nbsp;&nbsp;&nbsp;{!! session('errorPlugin') !!}'
+            })
+        @endif
 
-    $(function () {
-        bsCustomFileInput.init();
-    });
+        $(function () {
+            bsCustomFileInput.init();
+        });
+    </script>
 @endsection

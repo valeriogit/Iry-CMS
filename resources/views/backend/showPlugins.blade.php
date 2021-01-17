@@ -93,50 +93,52 @@
 @endsection
 
 @section('script')
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false
-    });
-
-    @if(session()->has('installedPlugin'))
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'center',
-            showConfirmButton: false,
-            timer: 3000
+    <script>
+        $("#example1").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false
         });
 
-        Toast.fire({
-            icon: 'success',
-            title: '&nbsp;&nbsp;&nbsp;Plugin installed successfully!'
-        })
-    @endif
+        @if(session()->has('installedPlugin'))
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'center',
+                showConfirmButton: false,
+                timer: 3000
+            });
 
-    @if(session()->has('deletedSuccessPlugin'))
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'center',
-            showConfirmButton: false,
-            timer: 3000
-        });
+            Toast.fire({
+                icon: 'success',
+                title: '&nbsp;&nbsp;&nbsp;Plugin installed successfully!'
+            })
+        @endif
 
-        Toast.fire({
-            icon: 'success',
-            title: '&nbsp;&nbsp;&nbsp;Plugin deleted successfully!'
-        })
-    @endif
+        @if(session()->has('deletedSuccessPlugin'))
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'center',
+                showConfirmButton: false,
+                timer: 3000
+            });
 
-    @if(session()->has('deletedFailPlugin'))
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'center',
-            showConfirmButton: false,
-            timer: 3000
-        });
+            Toast.fire({
+                icon: 'success',
+                title: '&nbsp;&nbsp;&nbsp;Plugin deleted successfully!'
+            })
+        @endif
 
-        Toast.fire({
-            icon: 'error',
-            title: '&nbsp;&nbsp;&nbsp;Plugin deleted error!'
-        })
-    @endif
+        @if(session()->has('deletedFailPlugin'))
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'center',
+                showConfirmButton: false,
+                timer: 3000
+            });
+
+            Toast.fire({
+                icon: 'error',
+                title: '&nbsp;&nbsp;&nbsp;Plugin deleted error!'
+            })
+        @endif
+    </script>
 @endsection
 

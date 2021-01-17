@@ -41,17 +41,8 @@ class SettingsController extends Controller
             'validationEmail' => 'nullable'
         ]);
 
-        $configuration = Configuration::first();
-
-        if($configuration->recaptcha == 1){
-            if($request->has('g-recaptcha-response')){
-                $captcha = new BackendController;
-                $captcha = $captcha->googleRecaptcha($request->input('g-recaptcha-response'));
-            }
-        }
-
         try{
-
+            $configuration = Configuration::first();
             $configuration->nameSite = $request->name;
 
             $path = public_path('');

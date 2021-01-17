@@ -90,66 +90,68 @@
 @endsection
 
 @section('script')
-    @if(session()->has('errorPlugin'))
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'center',
-            showConfirmButton: false,
-            timer: 3000
-            });
+    <script>
+        @if(session()->has('errorPlugin'))
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'center',
+                showConfirmButton: false,
+                timer: 3000
+                });
 
-        Toast.fire({
-            icon: 'error',
-            title: '&nbsp;&nbsp;&nbsp;{!! session('errorPlugin') !!}'
-        })
-    @endif
+            Toast.fire({
+                icon: 'error',
+                title: '&nbsp;&nbsp;&nbsp;{!! session('errorPlugin') !!}'
+            })
+        @endif
 
-    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-        lineNumbers: true,
-        matchBrackets: true,
-        mode: "application/x-httpd-php",
-        indentUnit: 4,
-        indentWithTabs: true,
-        styleActiveLine: true,
-        autoCloseBrackets: true
-    });
-
-    editor.setOption("theme", "monokai");
-
-    function saveFile(){
-
-        let file = getUrlVars()["file"];
-        let content = editor.getValue();
-
-        if(typeof file == 'undefined'){
-            file = "";
-        }
-
-        $.post("{{action('PluginController@saveModify', $id)}}",
-        {
-            _token:"{{csrf_token()}}",
-            file: file,
-            content: content
-        }, function(status){
-            Swal.queue([{
-                icon: status.code,
-                title: status.state,
-                confirmButtonText: 'Ok',
-                text: status.message,
-            }]);
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            lineNumbers: true,
+            matchBrackets: true,
+            mode: "application/x-httpd-php",
+            indentUnit: 4,
+            indentWithTabs: true,
+            styleActiveLine: true,
+            autoCloseBrackets: true
         });
-    }
 
-    function getUrlVars()
-    {
-        var vars = [], hash;
-        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-        for(var i = 0; i < hashes.length; i++)
-        {
-            hash = hashes[i].split('=');
-            vars.push(hash[0]);
-            vars[hash[0]] = hash[1];
+        editor.setOption("theme", "monokai");
+
+        function saveFile(){
+
+            let file = getUrlVars()["file"];
+            let content = editor.getValue();
+
+            if(typeof file == 'undefined'){
+                file = "";
+            }
+
+            $.post("{{action('PluginController@saveModify', $id)}}",
+            {
+                _token:"{{csrf_token()}}",
+                file: file,
+                content: content
+            }, function(status){
+                Swal.queue([{
+                    icon: status.code,
+                    title: status.state,
+                    confirmButtonText: 'Ok',
+                    text: status.message,
+                }]);
+            });
         }
-        return vars;
-    }
+
+        function getUrlVars()
+        {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for(var i = 0; i < hashes.length; i++)
+            {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+    </script>
 @endsection
