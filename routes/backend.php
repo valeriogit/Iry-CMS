@@ -54,3 +54,9 @@ Route::get('/assets/{author}/{plugin}/{folder}/{file}', [ function ($author, $pl
 
     return response()->json([ ], 404);
 }]);
+
+Route::fallback(function () {
+
+    return view("404");
+
+});

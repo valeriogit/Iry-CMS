@@ -219,7 +219,10 @@
       });
     }
   </script>
-  @yield('script')
 
-  </body>
-  </html>
+  {!! ReCaptcha::printJS() !!}
+
+@yield('script')
+
+</body>
+</html>

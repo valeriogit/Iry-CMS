@@ -14,7 +14,7 @@ use App\Models\Plugin;
 use App\Models\Menu;
 use App\Models\MenuList;
 use App\Models\MenuVoice;
-
+use App\Models\ReCaptcha;
 
 class PluginController extends Controller
 {
@@ -68,6 +68,12 @@ class PluginController extends Controller
         $validated = $request->validate([
             'zip' => 'required|file|mimes:zip'
         ]);
+
+        $captcha = ReCaptcha::checkReCaptcha($request);
+        if($captcha === false){
+            session()->flash('errorPlugin', 'An error occurred, retry please!');
+            return back();
+        }
 
         try {
             //check the upload

@@ -79,6 +79,7 @@
                     <!-- /.card-body -->
 
                     <div class="card-footer">
+                        {!! ReCaptcha::printField() !!}
                         <button type="submit" class="btn btn-success col-1">SAVE</button>
                     </div>
                 </form>
@@ -112,6 +113,7 @@
                     <!-- /.card-body -->
 
                     <div class="card-footer">
+                        {!! ReCaptcha::printField() !!}
                         <button type="submit" class="btn btn-success col-1">SAVE</button>
                     </div>
                 </form>

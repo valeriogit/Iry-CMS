@@ -50,6 +50,7 @@
             The password are different
           </div>
         </div>
+        {!! ReCaptcha::printField() !!}
         <div class="row">
           <div class="col-12">
             <button type="submit" id="btnsubmit" class="btn btn-primary btn-block">Change password</button>
@@ -91,6 +92,8 @@
     }
   }
 </script>
+
+{!! ReCaptcha::printJS() !!}
 
 </body>
 </html>

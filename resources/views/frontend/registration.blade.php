@@ -89,6 +89,7 @@
               Accept out terms
             </div>
           </div>
+          {!! ReCaptcha::printField() !!}
           <!-- /.col -->
           <div class="col-4">
             <button type="submit" id="btnsubmit" class="btn btn-primary btn-block">Register</button>
@@ -157,6 +158,8 @@
       })
       </script>
 @endif
+
+{!! ReCaptcha::printJS() !!}
 
 </body>
 </html>

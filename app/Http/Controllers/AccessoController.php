@@ -13,6 +13,7 @@ use App\Mail\ValidationEmail;
 use App\Mail\ResetPassword;
 use App\Models\User;
 use App\Models\Configuration;
+use App\Models\ReCaptcha;
 
 class AccessoController extends Controller{
   private $config;
@@ -39,6 +40,13 @@ class AccessoController extends Controller{
 
     if ($validator->fails()) {
       return redirect('login')->withErrors($validator);
+    }
+
+    $captcha = ReCaptcha::checkReCaptcha($request);
+    if($captcha === false){
+        $errlogin = "Incorrect reCaptcha";
+        session()->flash('errlogin', $errlogin);
+        return redirect()->action([AccessoController::class, 'getLogin']);
     }
 
     $username = $request->username;
@@ -87,8 +95,11 @@ class AccessoController extends Controller{
       'terms'     => 'required',
     ]);
 
-    if ($validator->fails()) {
-      return redirect('register')->withErrors($validator);
+    $captcha = ReCaptcha::checkReCaptcha($request);
+    if($captcha === false){
+        $errRegistration = "Incorrect reCaptcha";
+        session()->flash('mailSent', $errRegistration);
+        return redirect()->action([AccessoController::class, 'getRegistration']);
     }
 
     $user = new User;
@@ -138,6 +149,12 @@ class AccessoController extends Controller{
       return redirect('forgotPassword')->withErrors($validator);
     }
 
+    $captcha = ReCaptcha::checkReCaptcha($request);
+    if($captcha === false){
+        $errRegistration = "Incorrect reCaptcha";
+        return redirect()->with('mailSent', $errRegistration)->action([AccessoController::class, 'getForgotPassword']);
+    }
+
     $user = User::where('email', '=', $request->email)->first();
 
     $mailSent = "Email incorrect";
@@ -173,6 +190,13 @@ class AccessoController extends Controller{
 
     if ($validator->fails()) {
       return redirect('resetPassword')->withErrors($validator);
+    }
+
+    $captcha = ReCaptcha::checkReCaptcha($request);
+    if($captcha === false){
+        $errRegistration = "Incorrect reCaptcha";
+        session()->flash('mailSent', $errRegistration);
+        return redirect()->action([AccessoController::class, 'getLogin']);
     }
 
     $user = User::where('forgotPassword', '=', $request->tokenPass)->first();

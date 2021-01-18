@@ -43,7 +43,7 @@
             Insert email
           </div>
         </div>
-
+        {!! ReCaptcha::printField() !!}
         <div class="row">
           <div class="col-12">
             <button type="submit" class="btn btn-primary btn-block">Request new password</button>
@@ -88,5 +88,7 @@
       })
       </script>
 @endif
+
+{!! ReCaptcha::printJS() !!}
 </body>
 </html>

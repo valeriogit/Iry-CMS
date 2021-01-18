@@ -110,3 +110,8 @@
     -webkit-animation: shake 0.8s ease;
     animation: shake 0.8s ease;
 }
+
+.grecaptcha-badge {
+    bottom: 57px !important;
+    z-index: 1500;
+}

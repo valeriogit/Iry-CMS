@@ -12,11 +12,10 @@ use App\Models\Configuration;
 use App\Models\Menu;
 use App\Models\MenuList;
 use App\Models\MenuVoice;
-
+use App\Models\ReCaptcha;
 
 class SettingsController extends Controller
 {
-
     public function __construct()
     {
         $this->config = Configuration::first();
@@ -25,6 +24,7 @@ class SettingsController extends Controller
     }
 
     public function index(){
+
         return view('backend.settings')
                 ->with('config', $this->config)
                 ->with('activePage', $this->activePage)
@@ -40,6 +40,12 @@ class SettingsController extends Controller
             'favicon' => 'nullable',
             'validationEmail' => 'nullable'
         ]);
+
+        $captcha = ReCaptcha::checkReCaptcha($request);
+        if($captcha === false){
+            session()->flash('errorSettings', 'fail');
+            return redirect()->action([SettingsController::class, 'index']);
+        }
 
         try{
             $configuration = Configuration::first();
@@ -90,13 +96,10 @@ class SettingsController extends Controller
             'reCaptchaPrivate' => 'nullable|max:250',
         ]);
 
-        $configuration = Configuration::first();
-
-        if($configuration->recaptcha == 1){
-            if($request->has('g-recaptcha-response')){
-                $captcha = new BackendController;
-                $captcha = $captcha->googleRecaptcha($request->input('g-recaptcha-response'));
-            }
+        $captcha = ReCaptcha::checkReCaptcha($request);
+        if($captcha === false){
+            session()->flash('errorSettings', 'fail');
+            return redirect()->action([SettingsController::class, 'index']);
         }
 
         try {
@@ -125,12 +128,11 @@ class SettingsController extends Controller
                 $configuration->save();
             }
 
-            session()->flash('savedSettings', 'installed');
+            session()->flash('savedSettings', 'saved');
             return redirect()->action([SettingsController::class, 'index']);
-            //code...
         } catch (\Exception $e) {
             //dd($e);
-            session()->flash('errorSettings', 'installed');
+            session()->flash('errorSettings', 'fail');
             return redirect()->action([SettingsController::class, 'index']);
         }
     }

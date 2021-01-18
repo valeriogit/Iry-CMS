@@ -105,34 +105,9 @@ class BackendController extends Controller
 
     public function index()
     {
-            return view('backend.content')
-                ->with('config', $this->config)
-                ->with('activePage', $this->activePage)
-                ->with('menu', $this->menu);
-
-    }
-
-    public function googleRecaptcha($gRecaptchaResponse)
-    {
-        $configuration = Configuration::first();
-
-        if($configuration->recaptcha == 1){
-            $url = 'https://www.google.com/recaptcha/api/siteverify?secret='.$configuration->recaptchaSecret.'&response='.$gRecaptchaResponse;
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($curl, CURLOPT_HEADER, false);
-            $data = curl_exec($curl);
-            curl_close($curl);
-            $responseCaptchaData = json_decode($data);
-
-            if($responseCaptchaData->success) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        return false;
+        return view('backend.content')
+            ->with('config', $this->config)
+            ->with('activePage', $this->activePage)
+            ->with('menu', $this->menu);
     }
 }
