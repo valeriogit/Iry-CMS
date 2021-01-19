@@ -53,6 +53,7 @@ class ReCaptcha extends Model
 
     public static function printField()
     {
+        $config = Configuration::first();
         if($config->recaptcha == 1){
             return '<input type="hidden" name="g-recaptcha-response" class="reCaptcha">';
         }
