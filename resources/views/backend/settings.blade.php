@@ -75,6 +75,13 @@
                                 <input type="checkbox" name="validationEmail" id="validationEmail" @if($config->emailValidation == 1) checked @endif data-toggle="toggle" data-on="ON" data-off="OFF" data-onstyle="success" data-offstyle="danger">
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="form-group col-md-2 col-xs-12">
+                                <label for="cookieBanner">Cookie Banner</label>
+                                <br>
+                                <input type="checkbox" name="cookieBanner" id="cookieBanner" @if($config->cookieBanner == 1) checked @endif data-toggle="toggle" data-on="ON" data-off="OFF" data-onstyle="success" data-offstyle="danger">
+                            </div>
+                        </div>
                     </div>
                     <!-- /.card-body -->
 

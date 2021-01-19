@@ -15,28 +15,49 @@ class ReCaptcha extends Model
         $config = Configuration::first();
 
         if($config->recaptcha == 1){
-            return '<script src="https://www.google.com/recaptcha/api.js?render=' . $config->recaptchaSite . '"></script>
-            <script>
-                grecaptcha.ready(function() {
-                // do request for recaptcha token
-                // response is promise with passed token
-                    grecaptcha.execute("' . $config->recaptchaSite . '")
-                    .then(function(token){
-                        let campi = document.getElementsByName("g-recaptcha-response");
-                        for (let i = 0; i < campi.length; i++) {
-                            if(campi[i].type == "hidden"){
-                                campi[i].value = token;
+
+            $code = '<script ';
+
+            if($config->cookieBanner == 1)
+            {
+                $code = $code . 'type="text/plain" cookie-consent="strictly-necessary" ';
+            }
+
+            $code = $code . 'src="https://www.google.com/recaptcha/api.js?render=' . $config->recaptchaSite . '"></script>
+            <script ';
+
+            if($config->cookieBanner == 1)
+            {
+                $code = $code . 'type="text/plain" cookie-consent="strictly-necessary" ';
+            }
+
+            $code = $code . '>
+                setTimeout(function(){
+                    grecaptcha.ready(function() {
+                        grecaptcha.execute("' . $config->recaptchaSite . '")
+                        .then(function(token){
+                            let campi = document.getElementsByName("g-recaptcha-response");
+                            for (let i = 0; i < campi.length; i++) {
+                                if(campi[i].type == "hidden"){
+                                    campi[i].value = token;
+                                }
                             }
-                        }
+                        });
                     });
-                });
+                }, 1000);
             </script>';
+
+            return $code;
         }
     }
 
     public static function printField()
     {
-        return '<input type="hidden" name="g-recaptcha-response" class="reCaptcha">';
+        if($config->recaptcha == 1){
+            return '<input type="hidden" name="g-recaptcha-response" class="reCaptcha">';
+        }
+
+        return '';
     }
 
     public static function checkReCaptcha($request)

@@ -23,8 +23,8 @@ class SettingsController extends Controller
         $this->menu = DB::table('menu')->join('menuvoice', 'menu.idMenuVoice', '=', 'menuvoice.id')->select('menuvoice.name', 'menuvoice.url', 'menuvoice.slug', 'menuvoice.icon')->get();
     }
 
-    public function index(){
-
+    public function index()
+    {
         return view('backend.settings')
                 ->with('config', $this->config)
                 ->with('activePage', $this->activePage)
@@ -38,7 +38,8 @@ class SettingsController extends Controller
             'logo' => 'nullable|image|mimes:png,jpg,jpeg',
             'icon' => 'nullable|image|mimes:png,jpg,jpeg',
             'favicon' => 'nullable',
-            'validationEmail' => 'nullable'
+            'validationEmail' => 'nullable',
+            'cookieBanner' => 'nullable'
         ]);
 
         $captcha = ReCaptcha::checkReCaptcha($request);
@@ -75,6 +76,14 @@ class SettingsController extends Controller
             }
             else{
                 $configuration->emailValidation = 1;
+            }
+
+            if($request->cookieBanner == null)
+            {
+                $configuration->cookieBanner = 0;
+            }
+            else{
+                $configuration->cookieBanner = 1;
             }
 
             $configuration->save();

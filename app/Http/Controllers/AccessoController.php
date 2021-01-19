@@ -43,6 +43,7 @@ class AccessoController extends Controller{
     }
 
     $captcha = ReCaptcha::checkReCaptcha($request);
+
     if($captcha === false){
         $errlogin = "Incorrect reCaptcha";
         session()->flash('errlogin', $errlogin);

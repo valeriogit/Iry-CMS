@@ -2,9 +2,12 @@
 
 <html lang="en">
 <head>
+
+    {!! CookieConsent::printCookie() !!}
+
     @if(session()->has('downloadPlugin'))
-         <meta http-equiv="refresh" content="5;url={{ asset('/tmp/'.session('downloadPlugin')) }}">
-      @endif
+        <meta http-equiv="refresh" content="5;url={{ asset('/tmp/'.session('downloadPlugin')) }}">
+    @endif
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,6 +26,9 @@
     <!-- Sweet Alert -->
   <link rel="stylesheet" href="{{ asset('css/sweetalert2/bootstrap-4.min.css') }}">
   <link rel="stylesheet" href="{{ asset('css/backend/backend.css') }}">
+
+  <!-- Important for backend & frontend -->
+  <link rel="stylesheet" href="{{ asset('global/css/global.css') }}">
   @yield('css')
 </head>
 <body class="hold-transition sidebar-mini layout-navbar-fixed layout-footer-fixed">
@@ -223,6 +229,9 @@
   {!! ReCaptcha::printJS() !!}
 
 @yield('script')
+
+<!-- Important for backend & frontend -->
+<link rel="stylesheet" href="{{ asset('global/js/global.js') }}">
 
 </body>
 </html>

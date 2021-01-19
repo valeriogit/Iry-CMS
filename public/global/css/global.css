@@ -1,0 +1,10 @@
+.grecaptcha-badge {
+    bottom: 57px !important;
+    z-index: 1500;
+}
+
+.dark.cc_dialog {
+    position: fixed;
+    top: unset;
+    bottom: 0;
+}

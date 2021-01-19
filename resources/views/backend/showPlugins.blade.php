@@ -84,7 +84,7 @@
 
 @section('js')
 <!-- DataTables  & Plugins -->
-<script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+<script cookie-consent="strictly-necessary" src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('js/datatables-bs4/dataTables.bootstrap4.min.js') }}"></script>
 <script src="{{ asset('js/datatables-responsive/dataTables.responsive.min.js') }}"></script>
 <script src="{{ asset('js/datatables-responsive/responsive.bootstrap4.min.js') }}"></script>

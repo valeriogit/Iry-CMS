@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+    {!! CookieConsent::printCookie() !!}
+
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>{{ $config->nameSite }} | Login</title>
@@ -19,6 +22,8 @@
   <link rel="stylesheet" href="{{ asset('css/sweetalert2/bootstrap-4.min.css') }}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <!-- Important for backend & frontend -->
+  <link rel="stylesheet" href="{{ asset('global/css/global.css') }}">
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
@@ -121,5 +126,8 @@
 @endif
 
 {!! ReCaptcha::printJS() !!}
+
+<!-- Important for backend & frontend -->
+<link rel="stylesheet" href="{{ asset('global/js/global.js') }}">
 </body>
 </html>
