@@ -125,6 +125,36 @@
                     </div>
                 </form>
             </div>
+
+            <div class="card card-primary">
+                <!-- /.card-header -->
+                <div class="card-header">
+                    <h3 class="card-title">Google Analytics (GA4) settings</h3>
+                </div>
+                <!-- form start -->
+                <form action="{{ action('SettingsController@saveAnalyticsSettings') }}" method="POST" enctype="multipart/form-data" id="saveAnalyticsSettings">
+                    @csrf
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-md-2 col-xs-12">
+                                <label for="analytics">GA4 Activated</label>
+                                <br>
+                                <input id="analytics" name="analytics" type="checkbox" data-toggle="toggle" @if($config->analytics == 1) checked @endif data-on="ON" data-off="OFF" data-onstyle="success" data-offstyle="danger">
+                            </div>
+                            <div class="form-group col-md-4 col-xs-12">
+                                <label for="analyticsCode">GA4 Code</label>
+                                <textarea id="analyticsCode" name="analyticsCode" class="form-control @error('analyticsCode') is-invalid @enderror" placeholder="Enter Google Analytics code" @if($config->analyticsCode == "" || $config->analytics==0 ) disabled @endif rows="4">{{ $config->analyticsCode }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                        {!! ReCaptcha::printField() !!}
+                        <button type="submit" class="btn btn-success col-1">SAVE</button>
+                    </div>
+                </form>
+            </div>
             <!-- /.card -->
           </div>
           <!-- /.col -->
@@ -193,6 +223,17 @@
 
                     $("#reCaptchaPublic").prop("required", false);
                     $("#reCaptchaPrivate").prop("required", false);
+                }
+            })
+
+            $('#analytics').change(function() {
+                if($(this).prop('checked')){
+                    $("#analyticsCode").removeAttr("disabled");
+                    $("#analyticsCode").prop("required", true);
+                    $("#analyticsCode").focus();
+                } else {
+                    $("#analyticsCode").attr("disabled", "disabled");
+                    $("#analyticsCode").prop("required", false);
                 }
             })
         })

@@ -26,6 +26,7 @@ Route::group(['prefix' => 'admin',  'middleware' => 'isAdmin'], function()
     Route::get('/settings', [SettingsController::class, 'index']);
     Route::post('/settings/saveInfoSettings', [SettingsController::class, 'saveInfoSettings']);
     Route::post('/settings/saveRecaptchaSettings', [SettingsController::class, 'saveRecaptchaSettings']);
+    Route::post('/settings/saveAnalyticsSettings', [SettingsController::class, 'saveAnalyticsSettings']);
 
     /* Plugin Route */
     Route::get('/plugins', [PluginController::class, 'show']);

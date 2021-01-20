@@ -5,6 +5,8 @@
 
     {!! CookieConsent::printCookie() !!}
 
+    {!! GoogleAnalytics::printCode() !!}
+
     @if(session()->has('downloadPlugin'))
         <meta http-equiv="refresh" content="5;url={{ asset('/tmp/'.session('downloadPlugin')) }}">
     @endif

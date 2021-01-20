@@ -229,6 +229,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'ReCaptcha' => App\Models\ReCaptcha::class,
         'CookieConsent' => App\Models\CookieConsent::class,
+        'GoogleAnalytics' => App\Models\GoogleAnalytics::class,
 
     ],
 

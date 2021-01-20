@@ -145,4 +145,52 @@ class SettingsController extends Controller
             return redirect()->action([SettingsController::class, 'index']);
         }
     }
+
+    public function saveAnalyticsSettings(Request $request)
+    {
+        $validated = $request->validate([
+            'analytics' => 'nullable',
+            'analyticsCode' => 'nullable'
+        ]);
+
+        $captcha = ReCaptcha::checkReCaptcha($request);
+        if($captcha === false){
+            session()->flash('errorSettings', 'fail');
+            return redirect()->action([SettingsController::class, 'index']);
+        }
+
+        try {
+            if($request->analytics != null){
+                if($request->analyticsCode != ""){
+
+                    $configuration = Configuration::first();
+
+                    $configuration->analytics = 1;
+                    $configuration->analyticsCode = $request->analyticsCode;
+
+                    $configuration->save();
+
+                    session()->flash('savedSettings', 'installed');
+                    return redirect()->action([SettingsController::class, 'index']);
+                }
+                else{
+                    session()->flash('errorSettings', 'installed');
+                    return redirect()->action([SettingsController::class, 'index']);
+                }
+            }else{
+                $configuration = Configuration::first();
+
+                $configuration->analytics = 0;
+
+                $configuration->save();
+            }
+
+            session()->flash('savedSettings', 'saved');
+            return redirect()->action([SettingsController::class, 'index']);
+        } catch (\Exception $e) {
+            //dd($e);
+            session()->flash('errorSettings', 'fail');
+            return redirect()->action([SettingsController::class, 'index']);
+        }
+    }
 }

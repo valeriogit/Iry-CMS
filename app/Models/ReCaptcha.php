@@ -11,7 +11,8 @@ class ReCaptcha extends Model
 {
     use HasFactory;
 
-    public static function printJS(){
+    public static function printJS()
+    {
         $config = Configuration::first();
 
         if($config->recaptcha == 1){
