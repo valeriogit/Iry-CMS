@@ -20,7 +20,6 @@ class BackendController extends Controller
     {
         $this->config = Configuration::first();
         $this->activePage = "admin";
-        $this->menu = DB::table('menu')->join('menuvoice', 'menu.idMenuVoice', '=', 'menuvoice.id')->select('menuvoice.name', 'menuvoice.url', 'menuvoice.slug', 'menuvoice.icon')->get();
     }
 
     public function checkUpdate()
@@ -107,7 +106,6 @@ class BackendController extends Controller
     {
         return view('backend.content')
             ->with('config', $this->config)
-            ->with('activePage', $this->activePage)
-            ->with('menu', $this->menu);
+            ->with('activePage', $this->activePage);
     }
 }

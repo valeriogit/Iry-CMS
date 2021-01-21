@@ -230,7 +230,8 @@ return [
         'ReCaptcha' => App\Models\ReCaptcha::class,
         'CookieConsent' => App\Models\CookieConsent::class,
         'GoogleAnalytics' => App\Models\GoogleAnalytics::class,
-
+        'Roles' => App\Models\Role::class,
+        'Menu' => App\Models\Menu::class,
     ],
 
 ];

@@ -121,31 +121,35 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="{{ action('SettingsController@index') }}" class="nav-link parent-hover-animation @if($activePage=='settings') active @endif">
-                <i class="nav-icon shake-icon fas fa-cogs "></i>
-              <p>
-                Settings
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{{ action('PluginController@show') }}" class="nav-link parent-hover-animation @if($activePage=='plugin') active @endif">
-                <i class="nav-icon shake-icon fas fa-puzzle-piece "></i>
-              <p>
-                Plugins
-              </p>
-            </a>
-          </li>
-          @foreach ($menu as $item)
-          <li class="nav-item">
-            <a href="{{ $item->url }}" class="nav-link parent-hover-animation @if($activePage==$item->slug) active @endif">
-                <i class="nav-icon shake-icon {{ $item->icon }} "></i>
-              <p>
-                {{$item->name}}
-              </p>
-            </a>
-          </li>
+          @if(Roles::checkRole(['administrator']))
+            <li class="nav-item">
+                <a href="{{ action('SettingsController@index') }}" class="nav-link parent-hover-animation @if($activePage=='settings') active @endif">
+                    <i class="nav-icon shake-icon fas fa-cogs "></i>
+                <p>
+                    Settings
+                </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ action('PluginController@show') }}" class="nav-link parent-hover-animation @if($activePage=='plugin') active @endif">
+                    <i class="nav-icon shake-icon fas fa-puzzle-piece "></i>
+                    <p>
+                        Plugins
+                    </p>
+                </a>
+            </li>
+          @endif
+          @foreach(Menu::getMenuBackend() as $item)
+            @if(Roles::checkRoleMenu($item->roles))
+                <li class="nav-item">
+                    <a href="{{ $item->url }}" class="nav-link parent-hover-animation @if($activePage==$item->slug) active @endif">
+                        <i class="nav-icon shake-icon {{ $item->icon }} "></i>
+                    <p>
+                        {{$item->name}}
+                    </p>
+                    </a>
+                </li>
+            @endif
           @endforeach
         </ul>
       </nav>

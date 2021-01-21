@@ -16,9 +16,12 @@ use Auth;
 |
 */
 
+Route::group(['prefix' => 'admin',  'middleware' => 'checkRole'], function(){
+    Route::get('/', [BackendController::class, 'index']);
+});
+
 Route::group(['prefix' => 'admin',  'middleware' => 'isAdmin'], function()
 {
-    Route::get('/', [BackendController::class, 'index']);
     Route::get('/update', [BackendController::class, 'checkUpdate']);
     Route::post('/update', [BackendController::class, 'takeUpdate']);
 
