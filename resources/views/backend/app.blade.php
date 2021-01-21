@@ -46,9 +46,11 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a href="{{ url('/') }}" class="nav-link">Show site</a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a style="cursor:pointer" class="nav-link" onclick="checkUpdate();">Check Update</a>
-      </li>
+      @if(Roles::checkRole(['administrator']))
+        <li class="nav-item d-none d-sm-inline-block">
+            <a style="cursor:pointer" class="nav-link" onclick="checkUpdate();">Check Update</a>
+        </li>
+      @endif
     </ul>
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
@@ -135,6 +137,44 @@
                     <i class="nav-icon shake-icon fas fa-puzzle-piece "></i>
                     <p>
                         Plugins
+                    </p>
+                </a>
+            </li>
+          @endif
+          @if(Roles::checkRole(['administrator']))
+            <li class="nav-item @if($activePage=='profile') menu-open @endif ">
+                <a href="#" class="nav-link parent-hover-animation @if($activePage=='profile') active @endif">
+                <i class="nav-icon shake-icon fas fa-users"></i>
+                <p>
+                    Users
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+                </a>
+                <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link parent-hover-animation">
+                        <i class="nav-icon shake-icon fas fa-user-plus " style="margin-left: 3px;"></i>
+                        <p>
+                            Add new
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ action('ProfileController@getProfile') }}" class="nav-link parent-hover-animation @if($activePage=='profile') active @endif">
+                        <i class="nav-icon shake-icon fas fa-user "></i>
+                        <p>
+                            Profile
+                        </p>
+                    </a>
+                </li>
+                </ul>
+            </li>
+          @else
+            <li class="nav-item">
+                <a href="{{ action('ProfileController@getProfile') }}" class="nav-link parent-hover-animation @if($activePage=='profile') active @endif">
+                    <i class="nav-icon shake-icon fas fa-user "></i>
+                    <p>
+                        Profile
                     </p>
                 </a>
             </li>

@@ -16,10 +16,26 @@ use Auth;
 |
 */
 
-Route::group(['prefix' => 'admin',  'middleware' => 'checkRole'], function(){
+/*
+* Route only for authenticated user
+*/
+Route::group(['prefix' => 'admin',  'middleware' => 'auth'], function(){
     Route::get('/', [BackendController::class, 'index']);
+    Route::get('/profile', [ProfileController::class, 'getProfile']);
 });
 
+
+/*
+* Routes where user is not a subscriber
+*/
+Route::group(['prefix' => 'admin',  'middleware' => 'checkRole'], function(){
+
+});
+
+
+/*
+* Routes where user is admin
+*/
 Route::group(['prefix' => 'admin',  'middleware' => 'isAdmin'], function()
 {
     Route::get('/update', [BackendController::class, 'checkUpdate']);
@@ -43,7 +59,9 @@ Route::group(['prefix' => 'admin',  'middleware' => 'isAdmin'], function()
     Route::post('/plugins/modify/{id}', [PluginController::class, 'saveModify']);
 });
 
-/* Route for load css & js from plugin directory */
+/*
+* Route for load css & js from plugin directory
+*/
 Route::get('/assets/{author}/{plugin}/{folder}/{file}', [ function ($author, $plugin, $folder, $file) {
 
     $path = app_path("Http/Plugins/$author/$plugin/resources/$folder/$file");
@@ -59,6 +77,9 @@ Route::get('/assets/{author}/{plugin}/{folder}/{file}', [ function ($author, $pl
     return response()->json([ ], 404);
 }]);
 
+/*
+* Route for 404
+*/
 Route::fallback(function () {
 
     return view("404");

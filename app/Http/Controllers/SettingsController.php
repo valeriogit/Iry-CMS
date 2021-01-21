@@ -9,9 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Configuration;
-use App\Models\Menu;
-use App\Models\MenuList;
-use App\Models\MenuVoice;
 use App\Models\ReCaptcha;
 
 class SettingsController extends Controller
@@ -20,15 +17,13 @@ class SettingsController extends Controller
     {
         $this->config = Configuration::first();
         $this->activePage = "settings";
-        $this->menu = DB::table('menu')->join('menuvoice', 'menu.idMenuVoice', '=', 'menuvoice.id')->select('menuvoice.name', 'menuvoice.url', 'menuvoice.slug', 'menuvoice.icon')->get();
     }
 
     public function index()
     {
         return view('backend.settings')
                 ->with('config', $this->config)
-                ->with('activePage', $this->activePage)
-                ->with('menu', $this->menu);
+                ->with('activePage', $this->activePage);
     }
 
     public function saveInfoSettings(Request $request)

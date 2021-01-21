@@ -23,12 +23,10 @@ class PluginController extends Controller
         //we call this funciont from plugin for make views
         //and we call in this controller too
         $config = Configuration::first();
-        $menu = DB::table('menu')->join('menuvoice', 'menu.idMenuVoice', '=', 'menuvoice.id')->select('menuvoice.name', 'menuvoice.url', 'menuvoice.slug', 'menuvoice.icon')->get();
 
         return View::make($page)
             ->with('config', $config)
-            ->with('activePage', $activePage)
-            ->with('menu', $menu);
+            ->with('activePage', $activePage);
     }
 
     public function show()
