@@ -81,6 +81,11 @@
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
       </li>
+      <li class="navbar-nav">
+        <a class="nav-link" href="{{ action('AccessoController@Logout') }}">
+            <i class="fas fa-power-off"></i>
+        </a>
+      </li>
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -151,6 +156,14 @@
                 </p>
                 </a>
                 <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link parent-hover-animation">
+                        <i class="nav-icon shake-icon fas fa-user-cog " style="margin-left: 3px;"></i>
+                        <p>
+                            Manage Users
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link parent-hover-animation">
                         <i class="nav-icon shake-icon fas fa-user-plus " style="margin-left: 3px;"></i>

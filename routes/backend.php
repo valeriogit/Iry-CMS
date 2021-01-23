@@ -22,6 +22,7 @@ use Auth;
 Route::group(['prefix' => 'admin',  'middleware' => 'auth'], function(){
     Route::get('/', [BackendController::class, 'index']);
     Route::get('/profile', [ProfileController::class, 'getProfile']);
+    Route::post('/profile', [ProfileController::class, 'saveProfile']);
 });
 
 
@@ -57,6 +58,9 @@ Route::group(['prefix' => 'admin',  'middleware' => 'isAdmin'], function()
     Route::get('/plugins/download/{id}', [PluginController::class, 'downloadZip']);
     Route::get('/plugins/modify/{id}', [PluginController::class, 'modify']);
     Route::post('/plugins/modify/{id}', [PluginController::class, 'saveModify']);
+
+    Route::get('/profile/{id?}', [ProfileController::class, 'getProfile']);
+    Route::post('/profile/{id?}', [ProfileController::class, 'saveProfile']);
 });
 
 /*

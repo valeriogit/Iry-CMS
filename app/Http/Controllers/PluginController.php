@@ -305,6 +305,12 @@ class PluginController extends Controller
 
     public function modify(Request $request, $id)
     {
+        $captcha = ReCaptcha::checkReCaptcha($request);
+        if($captcha === false){
+            session()->flash('errorPlugin', 'An error occurred, retry please!');
+            return back();
+        }
+
         try{
             $plugin = Plugin::find($id);
 
@@ -443,6 +449,12 @@ class PluginController extends Controller
             'author' => 'required|max:250',
             'author-email' => 'nullable|email|max:250'
         ]);
+
+        $captcha = ReCaptcha::checkReCaptcha($request);
+        if($captcha === false){
+            session()->flash('errorPlugin', 'fail');
+            return redirect()->action([PluginController::class, 'create']);
+        }
 
         try {
             $name = $request->input('name');

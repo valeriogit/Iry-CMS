@@ -53,7 +53,7 @@ class SettingsController extends Controller
                 $request->favicon->move($path, 'favicon.ico');
             }
 
-            $path = public_path('images');
+            $path = public_path('img');
 
             if($request->has('logo')){
                 $request->logo->move($path, $request->logo->getClientOriginalName());

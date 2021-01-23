@@ -175,6 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Http\Plugins\PluginProvider::class,
+        Intervention\Image\ImageServiceProvider::class
 
     ],
 
@@ -227,11 +228,13 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        //custom
         'ReCaptcha' => App\Models\ReCaptcha::class,
         'CookieConsent' => App\Models\CookieConsent::class,
         'GoogleAnalytics' => App\Models\GoogleAnalytics::class,
         'Roles' => App\Models\Role::class,
         'Menu' => App\Models\Menu::class,
+        'Image' => Intervention\Image\Facades\Image::class
     ],
 
 ];

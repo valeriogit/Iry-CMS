@@ -51,7 +51,8 @@
                     <!-- /.card-body -->
 
                     <div class="card-footer">
-                    <button type="button" class="btn btn-primary" onclick="saveFile()">Save file</button>
+                        {!! ReCaptcha::printField() !!}
+                        <button type="button" class="btn btn-primary" onclick="saveFile()">Save file</button>
                     </div>
                 </form>
             </div>
