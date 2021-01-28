@@ -17,6 +17,12 @@ use Auth;
 */
 
 /*
+* Route for push web notification
+*/
+Route::post('/push','PushController@store');
+Route::get('/push','PushController@push')->name('push');
+
+/*
 * Route only for authenticated user
 */
 Route::group(['prefix' => 'admin',  'middleware' => 'auth'], function(){
@@ -59,8 +65,12 @@ Route::group(['prefix' => 'admin',  'middleware' => 'isAdmin'], function()
     Route::get('/plugins/modify/{id}', [PluginController::class, 'modify']);
     Route::post('/plugins/modify/{id}', [PluginController::class, 'saveModify']);
 
-    Route::get('/profile/{id?}', [ProfileController::class, 'getProfile']);
-    Route::post('/profile/{id?}', [ProfileController::class, 'saveProfile']);
+    Route::get('/user', [ProfileController::class, 'showUser']);
+    Route::get('/user/create', [ProfileController::class, 'createUser']);
+    Route::post('/user/create', [ProfileController::class, 'saveNewUser']);
+    Route::get('/user/modify/{id}', [ProfileController::class, 'getUser']);
+    Route::post('/user/modify/{id}', [ProfileController::class, 'saveUser']);
+    Route::get('/user/delete/{id}', [ProfileController::class, 'deleteUser']);
 });
 
 /*

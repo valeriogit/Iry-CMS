@@ -2,12 +2,14 @@
 
 <html lang="en">
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     {!! CookieConsent::printCookie() !!}
 
     {!! GoogleAnalytics::printCode() !!}
 
     @if(session()->has('downloadPlugin'))
+        <meta http-equiv="refresh" content="5;url={{ asset('/tmp/'.session('downloadPlugin')) }}">
         <meta http-equiv="refresh" content="5;url={{ asset('/tmp/'.session('downloadPlugin')) }}">
     @endif
 
@@ -44,6 +46,8 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
+        <a href="{{route('push')}}" class="btn btn-outline-primary btn-block">Make a Push Notification!</a>
+      </li><li class="nav-item d-none d-sm-inline-block">
         <a href="{{ url('/') }}" class="nav-link">Show site</a>
       </li>
       @if(Roles::checkRole(['administrator']))
@@ -111,7 +115,7 @@
           <img src="{{ asset('img').Auth::user()->avatar }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">{{ Auth::user()->username }}</a>
+          <a href="{{ action('ProfileController@getProfile') }}" class="d-block">{{ Auth::user()->username }}</a>
         </div>
       </div>
 
@@ -147,8 +151,8 @@
             </li>
           @endif
           @if(Roles::checkRole(['administrator']))
-            <li class="nav-item @if($activePage=='profile') menu-open @endif ">
-                <a href="#" class="nav-link parent-hover-animation @if($activePage=='profile') active @endif">
+            <li class="nav-item @if($activePage=='profile' || $activePage=='manageUser') menu-open @endif ">
+                <a href="#" class="nav-link parent-hover-animation @if($activePage=='profile' || $activePage=='manageUser') active @endif">
                 <i class="nav-icon shake-icon fas fa-users"></i>
                 <p>
                     Users
@@ -157,18 +161,10 @@
                 </a>
                 <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="#" class="nav-link parent-hover-animation">
+                    <a href="{{ action('ProfileController@showUser') }}" class="nav-link parent-hover-animation @if($activePage=='manageUser') active @endif">
                         <i class="nav-icon shake-icon fas fa-user-cog " style="margin-left: 3px;"></i>
                         <p>
                             Manage Users
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link parent-hover-animation">
-                        <i class="nav-icon shake-icon fas fa-user-plus " style="margin-left: 3px;"></i>
-                        <p>
-                            Add new
                         </p>
                     </a>
                 </li>
@@ -239,6 +235,8 @@
   <script src="{{ asset('js/sweetalert2/sweetalert2.min.js') }}"></script>
   <!-- bs-custom-file-input -->
   <script src="{{ asset('js/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+  <!-- webPush -->
+  <script @if($config->cookieBanner == 1) type="text/plain" cookie-consent="tracking" @endif src="{{ asset('js/enable-push.js') }}"></script>
   @yield('js')
 
   <script type="text/javascript">

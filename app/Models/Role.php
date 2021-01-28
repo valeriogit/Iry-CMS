@@ -36,8 +36,20 @@ class Role extends Model
         return false;
     }
 
+    //controlla i ruoli di un menu
     public static function checkRoleMenu($rolesMenu){
         $rolesMenu = explode(",",$rolesMenu);
         return self::checkRoleId($rolesMenu);
+    }
+
+    //prende il nome del ruolo di uno specifico utente
+    public static function getNameUserRole($idRole){
+        $role = Role::find($idRole);
+
+        if($role){
+            return $role->name;
+        }
+
+        return "";
     }
 }

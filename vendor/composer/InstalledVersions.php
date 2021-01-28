@@ -29,7 +29,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'b79dad0d3de28367bd59a812341faedfd65d8cfc',
+    'reference' => '8f55d91f2f1ca4008b884fa6fd2370301656d130',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
@@ -156,6 +156,15 @@ private static $installed = array (
       ),
       'reference' => 'ab3f5364d01f2c2c16113442fb987d26e4004913',
     ),
+    'fgrosse/phpasn1' => 
+    array (
+      'pretty_version' => 'v2.2.0',
+      'version' => '2.2.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'd1978f7abd580f3fc33561e7f71d4c12c7531fad',
+    ),
     'fideloper/proxy' => 
     array (
       'pretty_version' => '4.4.1',
@@ -167,12 +176,12 @@ private static $installed = array (
     ),
     'filp/whoops' => 
     array (
-      'pretty_version' => '2.9.1',
-      'version' => '2.9.1.0',
+      'pretty_version' => '2.9.2',
+      'version' => '2.9.2.0',
       'aliases' => 
       array (
       ),
-      'reference' => '307fb34a5ab697461ec4c9db865b20ff2fd40771',
+      'reference' => 'df7933820090489623ce0be5e85c7e693638e536',
     ),
     'fruitcake/laravel-cors' => 
     array (
@@ -461,6 +470,15 @@ private static $installed = array (
         0 => '*',
       ),
     ),
+    'laravel-notification-channels/webpush' => 
+    array (
+      'pretty_version' => '5.1.1',
+      'version' => '5.1.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'a7ace910dfe7f0ef1677a7fa51361ebce2456fdb',
+    ),
     'laravel/framework' => 
     array (
       'pretty_version' => 'v8.24.0',
@@ -477,7 +495,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'b79dad0d3de28367bd59a812341faedfd65d8cfc',
+      'reference' => '8f55d91f2f1ca4008b884fa6fd2370301656d130',
     ),
     'laravel/tinker' => 
     array (
@@ -514,6 +532,15 @@ private static $installed = array (
       array (
       ),
       'reference' => '3b9dff8aaf7323590c1d2e443db701eb1f9aa0d3',
+    ),
+    'minishlink/web-push' => 
+    array (
+      'pretty_version' => 'v6.0.3',
+      'version' => '6.0.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '8911bad58026db19ab5e39d19341ea9925cb1edb',
     ),
     'mockery/mockery' => 
     array (
@@ -754,6 +781,15 @@ private static $installed = array (
         0 => '1.0',
       ),
     ),
+    'psr/http-factory' => 
+    array (
+      'pretty_version' => '1.0.1',
+      'version' => '1.0.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '12ac7fcd07e5b077433f5f2bee95b3a771bf61be',
+    ),
     'psr/http-message' => 
     array (
       'pretty_version' => '1.0.1',
@@ -982,6 +1018,15 @@ private static $installed = array (
       array (
       ),
       'reference' => 'c6c1022351a901512170118436c764e473f6de8c',
+    ),
+    'spomky-labs/base64url' => 
+    array (
+      'pretty_version' => 'v2.0.4',
+      'version' => '2.0.4.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '7752ce931ec285da4ed1f4c5aa27e45e097be61d',
     ),
     'swiftmailer/swiftmailer' => 
     array (
@@ -1284,6 +1329,51 @@ private static $installed = array (
       array (
       ),
       'reference' => '80953678b19901e5165c56752d087fc11526017c',
+    ),
+    'web-token/jwt-core' => 
+    array (
+      'pretty_version' => 'v2.2.7',
+      'version' => '2.2.7.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'e68c4940da62682426e78eafb1e3a3ba4c7cbabe',
+    ),
+    'web-token/jwt-key-mgmt' => 
+    array (
+      'pretty_version' => 'v2.2.7',
+      'version' => '2.2.7.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '2f9758c7972cca3894fa28f17ceaf9c6db825b31',
+    ),
+    'web-token/jwt-signature' => 
+    array (
+      'pretty_version' => 'v2.2.7',
+      'version' => '2.2.7.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'cad4f3c51d9e3537c5f45f26ae2c61d08fd5ffd2',
+    ),
+    'web-token/jwt-signature-algorithm-ecdsa' => 
+    array (
+      'pretty_version' => 'v2.2.7',
+      'version' => '2.2.7.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '92f9f19ed9a9428d9835e564a2b9fdd7f8a4bd89',
+    ),
+    'web-token/jwt-util-ecc' => 
+    array (
+      'pretty_version' => 'v2.2.7',
+      'version' => '2.2.7.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '172688da426d61c5145ac64c418767ad455fc372',
     ),
     'webmozart/assert' => 
     array (

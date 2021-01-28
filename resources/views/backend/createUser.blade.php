@@ -1,7 +1,13 @@
 @extends('backend.app')
 
 @section('title')
-  <title>{{ $config->nameSite }} - Edit Profile</title>
+  <title>{{ $config->nameSite }} - Create User</title>
+@endsection
+
+@section('css')
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/select2/select2-bootstrap4.min.css') }}">
 @endsection
 
 @section('content')
@@ -11,7 +17,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>USER MANAGER - MODIFY</h1>
+            <h1>USER MANAGER - CREATE</h1>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -25,35 +31,35 @@
             <!-- general form elements -->
             <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">User information (leave fields empty if you wouldn't change it - for change username and email ask to Administrator)</h3>
+                    <h3 class="card-title">User information</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form action="{{ action('ProfileController@saveProfile') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ action('ProfileController@saveNewUser') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
                         <div class="row">
-                            <div class="form-group col-md-3 col-xs-6">
+                            <div class="form-group col-md-2 col-xs-6">
                                 <label for="username">username</label>
-                                @if(Roles::checkRole(['administrator']))
-                                  <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="username" placeholder="Enter username" value="{{ $user->username }}">
-                                @else
-                                  <p>{{ $user->username}}</p>
-                                @endif
+                                <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="username" placeholder="Enter username" required>
                             </div>
-                            <div class="form-group col-md-3 col-xs-6">
+                            <div class="form-group col-md-2 col-xs-6">
                                 <label for="password">New password </label>
-                                <input type="text" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Enter new password">
+                                <input type="text" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Enter new password" required>
                             </div>
-                            <div class="form-group col-md-3 col-xs-6">
+                            <div class="form-group col-md-2 col-xs-6">
                                 <label for="author">Email</label>
-                                @if(Roles::checkRole(['administrator']))
-                                  <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Enter email" value="{{ $user->email }}">
-                                @else
-                                  <p>{{ $user->email}}</p>
-                                @endif
+                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Enter email" required>
                             </div>
-                            <div class="form-group col-md-3 col-xs-6">
+                            <div class="form-group col-md-2 col-xs-6">
+                                <label for="role">Role</label>
+                                <select class="form-control select2bs4" name="role">
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2 col-xs-6">
                                 <label for="avatar">Avatar</label>
                                 <div class="input-group">
                                     <div class="custom-file">
@@ -73,7 +79,7 @@
                 </form>
             </div>
                 <div class="col-1">
-                    <a href="{{ action('PluginController@show') }}">
+                    <a href="{{ action('ProfileController@showUser') }}">
                         <button class="btn btn-block bg-gradient-secondary">Back</button>
                     </a>
                 </div>
@@ -90,6 +96,11 @@
   <!-- /.content-wrapper -->
 @endsection
 
+@section('js')
+    <!-- Select2 -->
+    <script src="{{ asset('js/select2/select2.full.min.js') }}"></script>
+@endsection
+
 @section('script')
     <script>
         @if(session()->has('errorProfile'))
@@ -102,7 +113,7 @@
 
             Toast.fire({
                 icon: 'error',
-                title: '&nbsp;&nbsp;&nbsp;Profile not updated!'
+                title: '&nbsp;&nbsp;&nbsp;User not created!'
             })
         @endif
 
@@ -116,12 +127,17 @@
 
             Toast.fire({
                 icon: 'success',
-                title: '&nbsp;&nbsp;&nbsp;Profile updated!'
+                title: '&nbsp;&nbsp;&nbsp;User created!'
             })
         @endif
 
         $(function () {
             bsCustomFileInput.init();
         });
+
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        })
     </script>
 @endsection
