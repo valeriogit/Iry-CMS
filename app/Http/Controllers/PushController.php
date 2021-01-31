@@ -7,6 +7,9 @@ use App\Models\User;
 use Auth;
 use Notification;
 use Illuminate\Support\Facades\DB;
+
+use App\Models\Configuration;
+
 class PushController extends Controller
 {
     /**
@@ -32,7 +35,12 @@ class PushController extends Controller
 
     public function push(){
 
-        Notification::send(User::all(),new PushDemo);
+        $config = Configuration::first();
+        if($config->webPush == 1)
+        {
+            $notify = new PushDemo("titolo", "messaggio", "testolink", "link", '/img/icoIry.png', '/favicon.ico',);
+            Notification::send(User::all(),$notify);
+        }
         return redirect()->back();
     }
 

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\Configuration;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,5 +26,8 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         \URL::forceScheme('https');
+        $settings = Configuration::first();
+        config(['webpush.vapid.public_key' => $settings->vapidSite]);
+        config(['webpush.vapid.private_key' => $settings->vapidSecret]);
     }
 }

@@ -14,6 +14,7 @@ use App\Mail\ResetPassword;
 use App\Models\User;
 use App\Models\Configuration;
 use App\Models\ReCaptcha;
+use App\Models\EventPushNotification;
 
 class AccessoController extends Controller{
   private $config;
@@ -126,6 +127,8 @@ class AccessoController extends Controller{
       $user = User::where('emailValidate', '=',$token)->first();
       $user->emailValidate = 1;
       $user->save();
+
+      EventPushNotification::RegistrationUserNotification("New user", "Say hi to ".$user->username, $testolink);
     }
 
     return redirect('login');

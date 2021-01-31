@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\Configuration;
 use App\Models\ReCaptcha;
+use App\Models\EventPushNotification;
 
 class SettingsController extends Controller
 {
@@ -21,9 +22,11 @@ class SettingsController extends Controller
 
     public function index()
     {
+        $eventPush = EventPushNotification::first();
         return view('backend.settings')
                 ->with('config', $this->config)
-                ->with('activePage', $this->activePage);
+                ->with('activePage', $this->activePage)
+                ->with('eventPush', $eventPush);
     }
 
     public function saveInfoSettings(Request $request)
@@ -87,7 +90,7 @@ class SettingsController extends Controller
             return redirect()->action([SettingsController::class, 'index']);
         }catch(\Exception $e){
             //dd($e);
-            session()->flash('errorSettings', 'installed');
+            session()->flash('errorSettings', 'fail');
             return redirect()->action([SettingsController::class, 'index']);
         }
     }
@@ -121,7 +124,7 @@ class SettingsController extends Controller
                     return redirect()->action([SettingsController::class, 'index']);
                 }
                 else{
-                    session()->flash('errorSettings', 'installed');
+                    session()->flash('errorSettings', 'fail');
                     return redirect()->action([SettingsController::class, 'index']);
                 }
             }else{
@@ -184,6 +187,86 @@ class SettingsController extends Controller
             return redirect()->action([SettingsController::class, 'index']);
         } catch (\Exception $e) {
             //dd($e);
+            session()->flash('errorSettings', 'fail');
+            return redirect()->action([SettingsController::class, 'index']);
+        }
+    }
+
+    public function saveWebPush(Request $request)
+    {
+        $validated = $request->validate([
+            'webPush' => 'nullable|max:250',
+            'vapidSite' => 'nullable|max:250',
+            'vapidSecret' => 'nullable|max:250',
+            'iconNotification' => 'nullable|image|mimes:png,jpg,jpeg',
+            'iconBadge' => 'nullable|image|mimes:png,jpg,jpeg'
+        ]);
+
+        $captcha = ReCaptcha::checkReCaptcha($request);
+        if($captcha === false){
+            session()->flash('errorSettings', 'fail');
+            return redirect()->action([SettingsController::class, 'index']);
+        }
+
+        try{
+            if($request->webPush != null){
+                if($request->vapidSite != "" && $request->vapidSecret != ""){
+                    $configuration = Configuration::first();
+
+                    $configuration->webPush = 1;
+                    $configuration->vapidSite = $request->vapidSite;
+                    $configuration->vapidSecret = $request->vapidSecret;
+
+                    $configuration->save();
+
+                    $path = public_path('img/webpush');
+
+                    if($request->has('iconNotification')){
+                        $request->iconNotification->move($path, $request->iconNotification->getClientOriginalName());
+                        $configuration->iconNotification = "/img/webpush/".$request->iconNotification->getClientOriginalName();
+                    }
+
+                    if($request->has('iconBadge')){
+                        $request->iconBadge->move($path, $request->iconBadge->getClientOriginalName());
+                        $configuration->iconBadge = "/img/webpush/".$request->iconBadge->getClientOriginalName();
+                    }
+
+                    $eventPush = EventPushNotification::first();
+
+                    if($request->webPost != null){
+                        $eventPush->post = 1;
+                    }
+                    else{
+                        $eventPush->post = 0;
+                    }
+
+                    if($request->webUser != null){
+                        $eventPush->user = 1;
+                    }
+                    else{
+                        $eventPush->user = 0;
+                    }
+
+                    $eventPush->save();
+                }
+                else{
+                    session()->flash('errorSettings', 'fail');
+                    return redirect()->action([SettingsController::class, 'index']);
+                }
+            }else{
+                $configuration = Configuration::first();
+
+                $configuration->webPush = 0;
+
+                $configuration->save();
+            }
+
+            $configuration->save();
+
+            session()->flash('savedSettings', 'installed');
+            return redirect()->action([SettingsController::class, 'index']);
+        }catch(\Exception $e){
+            dd($e);
             session()->flash('errorSettings', 'fail');
             return redirect()->action([SettingsController::class, 'index']);
         }

@@ -87,7 +87,7 @@
 
                     <div class="card-footer">
                         {!! ReCaptcha::printField() !!}
-                        <button type="submit" class="btn btn-success col-1">SAVE</button>
+                        <button type="submit" class="btn btn-success col-lg-1 col-xs-8 col-md-2">SAVE</button>
                     </div>
                 </form>
             </div>
@@ -113,7 +113,7 @@
                             </div>
                             <div class="form-group col-md-4 col-xs-12">
                                 <label for="reCaptchaPrivate">reCaptcha Private</label>
-                                <input type="text" class="form-control @error('reCaptchaPrivate') is-invalid @enderror" id="reCaptchaPrivate" name="reCaptchaPrivate" placeholder="Enter reCapatcha site" @if($config->recaptchaSecret == "" || $config->recaptcha==0) disabled @endif value="{{ $config->recaptchaSecret }}">
+                                <input type="text" class="form-control @error('reCaptchaPrivate') is-invalid @enderror" id="reCaptchaPrivate" name="reCaptchaPrivate" placeholder="Enter reCapatcha private" @if($config->recaptchaSecret == "" || $config->recaptcha==0) disabled @endif value="{{ $config->recaptchaSecret }}">
                             </div>
                         </div>
                     </div>
@@ -121,7 +121,7 @@
 
                     <div class="card-footer">
                         {!! ReCaptcha::printField() !!}
-                        <button type="submit" class="btn btn-success col-1">SAVE</button>
+                        <button type="submit" class="btn btn-success col-lg-1 col-xs-8 col-md-2">SAVE</button>
                     </div>
                 </form>
             </div>
@@ -151,7 +151,77 @@
 
                     <div class="card-footer">
                         {!! ReCaptcha::printField() !!}
-                        <button type="submit" class="btn btn-success col-1">SAVE</button>
+                        <button type="submit" class="btn btn-success col-lg-1 col-xs-8 col-md-2">SAVE</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card card-primary">
+                <!-- /.card-header -->
+                <div class="card-header">
+                    <h3 class="card-title">Web Push Notification settings (to use Web Push Notification go on <a href="https://web-push-codelab.glitch.me/"><b style="color:black">Codelab</b></a> - leave the image fields blank if you don't want to change them)</h3>
+                </div>
+                <!-- form start -->
+                <form action="{{ action('SettingsController@saveWebPush') }}" method="POST" enctype="multipart/form-data" id="saveWebPush">
+                    @csrf
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-md-2 col-xs-12">
+                                <label for="webPush">Web Push Notification Activated</label>
+                                <br>
+                                <input id="webPush" name="webPush" type="checkbox" data-toggle="toggle" @if($config->webPush == 1) checked @endif data-on="ON" data-off="OFF" data-onstyle="success" data-offstyle="danger">
+                            </div>
+                            <div class="form-group col-md-4 col-xs-12">
+                                <label for="vapidSite">Public Key</label>
+                                <input type="text" class="form-control @error('vapidSite') is-invalid @enderror" id="vapidSite" name="vapidSite" placeholder="Enter public key" @if($config->vapidSite == "" || $config->webPush==0 ) disabled @endif value="{{ $config->vapidSite }}">
+                            </div>
+                            <div class="form-group col-md-4 col-xs-12">
+                                <label for="vapidSecret">Private Key</label>
+                                <input type="text" class="form-control @error('vapidSecret') is-invalid @enderror" id="vapidSecret" name="vapidSecret" placeholder="Enter private key" @if($config->vapidSecret == "" || $config->webPush==0) disabled @endif value="{{ $config->vapidSecret }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4 offset-md-2 col-xs-12">
+                                <label for="iconNotification">Icon Notification (550*550 or square)</label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input @error('iconNotification') is-invalid @enderror" id="iconNotification" name="iconNotification" accept=".png,.jpg,.jpeg" @if($config->webPush==0 ) disabled @endif>
+                                        <label class="custom-file-label" for="iconNotification">Choose icon notification</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4 col-xs-12">
+                                <label for="iconBadge">Icon Badge (square)</label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input @error('iconBadge') is-invalid @enderror" id="iconBadge" name="iconBadge" accept=".png,.jpg,.jpeg" @if($config->webPush==0 ) disabled @endif>
+                                        <label class="custom-file-label" for="iconBadge">Choose icon badge</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if($config->webPush == 1)
+                        <div class="row">
+                            <div class="form-group col-md-2 offset-md-2 col-xs-12">
+                                <label for="webPost">Notification on post</label>
+                                <br>
+                                <input id="webPost" name="webPost" type="checkbox" data-toggle="toggle" @if($eventPush->post == 1) checked @endif data-on="ON" data-off="OFF" data-onstyle="success" data-offstyle="danger">
+                            </div>
+                            <div class="form-group col-md-2 col-xs-12">
+                                <label for="webUser">Notification on user</label>
+                                <br>
+                                <input id="webUser" name="webUser" type="checkbox" data-toggle="toggle" @if($eventPush->user == 1) checked @endif data-on="ON" data-off="OFF" data-onstyle="success" data-offstyle="danger">
+                            </div>
+                        </div>
+                        @endif
+
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                        {!! ReCaptcha::printField() !!}
+                        <button type="submit" class="btn btn-success col-lg-1 col-xs-8 col-md-2">SAVE</button>
                     </div>
                 </form>
             </div>
@@ -234,6 +304,30 @@
                 } else {
                     $("#analyticsCode").attr("disabled", "disabled");
                     $("#analyticsCode").prop("required", false);
+                }
+            })
+
+            $('#webPush').change(function() {
+                if($(this).prop('checked')){
+                    $("#vapidSite").removeAttr("disabled");
+                    $("#vapidSite").prop("required", true);
+                    $("#vapidSite").focus();
+
+                    $("#vapidSecret").removeAttr("disabled");
+                    $("#vapidSecret").prop("required", true);
+
+                    $("#iconNotification").removeAttr("disabled");
+                    $("#iconBadge").removeAttr("disabled");
+
+                } else {
+                    $("#vapidSite").attr("disabled", "disabled");
+                    $("#vapidSite").prop("required", false);
+
+                    $("#vapidSecret").attr("disabled", "disabled");
+                    $("#vapidSecret").prop("required", false);
+
+                    $("#iconNotification").attr("disabled", "disabled");
+                    $("#iconBadge").attr("disabled", "disabled");
                 }
             })
         })

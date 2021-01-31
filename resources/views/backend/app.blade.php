@@ -149,8 +149,6 @@
                     </p>
                 </a>
             </li>
-          @endif
-          @if(Roles::checkRole(['administrator']))
             <li class="nav-item @if($activePage=='profile' || $activePage=='manageUser') menu-open @endif ">
                 <a href="#" class="nav-link parent-hover-animation @if($activePage=='profile' || $activePage=='manageUser') active @endif">
                 <i class="nav-icon shake-icon fas fa-users"></i>
@@ -177,6 +175,14 @@
                     </a>
                 </li>
                 </ul>
+            </li>
+            <li class="nav-item">
+                <a href="{{ action('MenuController@createMenu') }}" class="nav-link parent-hover-animation @if($activePage=='menu') active @endif">
+                    <i class="nav-icon shake-icon fab fa-elementor "></i>
+                    <p>
+                        Menu Manager
+                    </p>
+                </a>
             </li>
           @else
             <li class="nav-item">
@@ -235,8 +241,12 @@
   <script src="{{ asset('js/sweetalert2/sweetalert2.min.js') }}"></script>
   <!-- bs-custom-file-input -->
   <script src="{{ asset('js/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
-  <!-- webPush -->
-  <script @if($config->cookieBanner == 1) type="text/plain" cookie-consent="tracking" @endif src="{{ asset('js/enable-push.js') }}"></script>
+
+  @if($config->webPush == 1)
+    <!-- webPush -->
+    <script @if($config->cookieBanner == 1) type="text/plain" cookie-consent="tracking" @endif src="{{ asset('js/enable-push.js') }}"></script>
+  @endif
+
   @yield('js')
 
   <script type="text/javascript">

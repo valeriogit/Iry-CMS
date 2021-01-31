@@ -53,6 +53,7 @@ Route::group(['prefix' => 'admin',  'middleware' => 'isAdmin'], function()
     Route::post('/settings/saveInfoSettings', [SettingsController::class, 'saveInfoSettings']);
     Route::post('/settings/saveRecaptchaSettings', [SettingsController::class, 'saveRecaptchaSettings']);
     Route::post('/settings/saveAnalyticsSettings', [SettingsController::class, 'saveAnalyticsSettings']);
+    Route::post('/settings/saveWebPush', [SettingsController::class, 'saveWebPush']);
 
     /* Plugin Route */
     Route::get('/plugins', [PluginController::class, 'show']);
@@ -71,6 +72,10 @@ Route::group(['prefix' => 'admin',  'middleware' => 'isAdmin'], function()
     Route::get('/user/modify/{id}', [ProfileController::class, 'getUser']);
     Route::post('/user/modify/{id}', [ProfileController::class, 'saveUser']);
     Route::get('/user/delete/{id}', [ProfileController::class, 'deleteUser']);
+
+    Route::get('/menu/create', [MenuController::class, 'createMenu']);
+    Route::post('/menu/create', [MenuController::class, 'saveMenu']);
+    Route::post('/menu/checkname', [MenuController::class, 'checkNameMenu']);
 });
 
 /*

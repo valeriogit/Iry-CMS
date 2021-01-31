@@ -8,32 +8,45 @@ use NotificationChannels\WebPush\WebPushChannel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
+use App\Models\Configuration;
+
 class PushDemo extends Notification
 {
     use Queueable;
+
+    protected $title;
+    protected $icon;
+    protected $badge;
+    protected $message;
+    protected $textlink;
+    protected $link;
+
+    public function __construct($title, $message, $textLink, $link) {
+
+        $config = Configuration::first();
+
+        $this->title = $title;
+        $this->message = $message;
+        $this->textLink = $textLink;
+        $this->link = $link;
+        $this->icon = $config->iconNotification;
+        $this->badge = $config->iconBadge;
+    }
 
     public function via($notifiable)
     {
         return [WebPushChannel::class];
     }
 
-    public function toWebPush($notifiable, $notification)
+    public function toWebPush()
     {
-        $url = url('/admin/profile');
         return (new WebPushMessage)
-            ->title('Approved!')
-            ->icon('/approved-icon.png')
-            ->body('Your account was approved!')
-            ->action('View account', $url)
+            ->title($this->title)
+            ->icon($this->icon)
+            ->body($this->message)
+            ->action($this->textLink, $this->link)
+            ->badge($this->badge)
             ->options(['TTL' => 1000]);
-            // ->data(['id' => $notification->id])
-            // ->badge()
-            // ->dir()
-            // ->image()
-            // ->lang()
-            // ->renotify()
-            // ->requireInteraction()
-            // ->tag()
-            // ->vibrate()
+            //->image();
     }
 }
