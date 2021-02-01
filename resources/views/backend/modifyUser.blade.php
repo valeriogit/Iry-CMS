@@ -1,7 +1,7 @@
 @extends('backend.app')
 
 @section('title')
-  <title>{{ $config->nameSite }} - Edit Profile</title>
+  <title>{{ $config->nameSite }} - Edit User</title>
 @endsection
 
 @section('css')

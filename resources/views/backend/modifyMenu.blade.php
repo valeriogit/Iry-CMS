@@ -5,6 +5,7 @@
 @endsection
 
 @section('css')
+    <!-- iconpicker -->
     <link rel="stylesheet" href="{{ asset('css/bootstrap-iconpicker/bootstrap-iconpicker.min.css') }}">
 @endsection
 
@@ -53,10 +54,6 @@
                         <option value="_top">Top</option>
                         </select>
                         </div>
-                        <div class="form-group">
-                            <label for="role">role</label>
-                            <input type="text" name="role" class="form-control item-menu" id="role" placeholder="fds">
-                            </div>
                         </form>
                         </div>
                     <div class="card-footer">
@@ -67,7 +64,17 @@
                 </div>
             </div>
             <div class="col-md-8 col-sm-12">
-                <ul id="myEditor" class="sortableLists list-group"></ul>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="name">Menu name</label>
+                            <input type="text" class="form-control item-menu" id="name" name="name" placeholder="Menu name" value="{{ $menu->name }}">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <ul id="myEditor" class="sortableLists list-group"></ul>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -81,7 +88,7 @@
 @endsection
 
 @section('js')
-<!-- DataTables  & Plugins -->
+<!-- iconpicker-->
 <script src="{{ asset('js/bootstrap-iconpicker/iconset/fontawesome5-3-1.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap-iconpicker/bootstrap-iconpicker.min.js') }}"></script>
 <script src="{{ asset('js/jquery-menu-editor/jquery-menu-editor.js') }}"></script>
@@ -95,13 +102,13 @@
         var sortableListOptions = {
             placeholderCss: {'background-color': "#cccccc"}
         };
-        var editor = new MenuEditor('myEditor',
-                    {
-                    listOptions: sortableListOptions,
-                    iconPicker: iconPickerOptions,
-                    maxLevel: 5 // (Optional) Default is -1 (no level limit)
-                    // Valid levels are from [0, 1, 2, 3,...N]
-                    });
+        var editor = new MenuEditor('myEditor',{
+            listOptions: sortableListOptions,
+            iconPicker: iconPickerOptions,
+            maxLevel: 5 // (Optional) Default is -1 (no level limit)
+            // Valid levels are from [0, 1, 2, 3,...N]
+        });
+
         editor.setForm($('#frmEdit'));
         editor.setUpdateButton($('#btnUpdate'));
         //Calling the update method
@@ -112,14 +119,6 @@
             }
             else{
                 $('#text').removeClass("is-invalid");
-            }
-
-            if($('#href').val() == ""){
-                $('#href').addClass("is-invalid");
-                return false;
-            }
-            else{
-                $('#href').removeClass("is-invalid");
             }
 
             editor.update();
@@ -134,38 +133,47 @@
                 $('#text').removeClass("is-invalid");
             }
 
-            if($('#href').val() == ""){
-                $('#href').addClass("is-invalid");
-                return false;
-            }
-            else{
-                $('#href').removeClass("is-invalid");
-            }
-
             editor.add();
         });
 
-        var arrayJson = [{"href":"http://home.com","icon":"fas fa-home","text":"Home", "target": "_top", "title": "My Home"},{"icon":"fas fa-chart-bar","text":"Opcion2"},{"icon":"fas fa-bell","text":"Opcion3"},{"icon":"fas fa-crop","text":"Opcion4"},{"icon":"fas fa-flask","text":"Opcion5"},{"icon":"fas fa-map-marker","text":"Opcion6"},{"icon":"fas fa-search","text":"Opcion7","children":[{"icon":"fas fa-plug","text":"Opcion7-1","children":[{"icon":"fas fa-filter","text":"Opcion7-1-1"}]}]}];
+        var arrayJson = {!! $menu->param !!};
         editor.setData(arrayJson);
 
         /*take value when save*/
         $("#btnSave").click(function(){
-            $.post("{{ action('MenuController@saveMenu') }}",
+            if($('#name').val() == ""){
+                $('#name').addClass("is-invalid");
+                return false;
+            }
+            else{
+                $('#name').removeClass("is-invalid");
+            }
+
+            if(editor.getString() == "[]"){
+                menuToast.fire({
+                    icon: 'error',
+                    title: '&nbsp;&nbsp;&nbsp;Insert at least one item in the menu!'
+                })
+                return false;
+            }
+
+            $.post("{{ action('MenuController@updateMenu', $menu->id) }}",
             {
                 menu: editor.getString(),
+                name: $('#name').val(),
                 _token: "{{csrf_token()}}"
             },
             function(data){
                 if(data == true){
                     menuToast.fire({
                         icon: 'success',
-                        title: '&nbsp;&nbsp;&nbsp;Menu saved successfully!'
+                        title: '&nbsp;&nbsp;&nbsp;Menu updated successfully!'
                     })
                 }
                 else{
                     menuToast.fire({
                         icon: 'error',
-                        title: '&nbsp;&nbsp;&nbsp;Menu saving error!'
+                        title: '&nbsp;&nbsp;&nbsp;Menu update failed!'
                     })
                 }
             });

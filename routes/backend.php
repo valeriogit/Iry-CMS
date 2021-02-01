@@ -73,9 +73,14 @@ Route::group(['prefix' => 'admin',  'middleware' => 'isAdmin'], function()
     Route::post('/user/modify/{id}', [ProfileController::class, 'saveUser']);
     Route::get('/user/delete/{id}', [ProfileController::class, 'deleteUser']);
 
+    Route::get('/menu', [MenuController::class, 'showMenu']);
+    Route::post('/menu/visibility', [MenuController::class, 'changeVisibility']);
+    Route::post('/menu/checkname', [MenuController::class, 'checkNameMenu']);
     Route::get('/menu/create', [MenuController::class, 'createMenu']);
     Route::post('/menu/create', [MenuController::class, 'saveMenu']);
-    Route::post('/menu/checkname', [MenuController::class, 'checkNameMenu']);
+    Route::get('/menu/modify/{id}', [MenuController::class, 'modifyMenu']);
+    Route::post('/menu/modify/{id}', [MenuController::class, 'updateMenu']);
+    Route::get('/menu/delete/{id}', [MenuController::class, 'deleteMenu']);
 });
 
 /*

@@ -160,7 +160,7 @@
                 <ul class="nav nav-treeview">
                 <li class="nav-item">
                     <a href="{{ action('ProfileController@showUser') }}" class="nav-link parent-hover-animation @if($activePage=='manageUser') active @endif">
-                        <i class="nav-icon shake-icon fas fa-user-cog " style="margin-left: 3px;"></i>
+                        <i class="nav-icon shake-icon fas fa-user-cog subList"></i>
                         <p>
                             Manage Users
                         </p>
@@ -168,7 +168,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ action('ProfileController@getProfile') }}" class="nav-link parent-hover-animation @if($activePage=='profile') active @endif">
-                        <i class="nav-icon shake-icon fas fa-user "></i>
+                        <i class="nav-icon shake-icon fas fa-user subList"></i>
                         <p>
                             Profile
                         </p>
@@ -176,13 +176,32 @@
                 </li>
                 </ul>
             </li>
-            <li class="nav-item">
-                <a href="{{ action('MenuController@createMenu') }}" class="nav-link parent-hover-animation @if($activePage=='menu') active @endif">
-                    <i class="nav-icon shake-icon fab fa-elementor "></i>
-                    <p>
-                        Menu Manager
-                    </p>
+            <li class="nav-item @if($activePage=='menu' || $activePage=='manageMenu') menu-open @endif ">
+                <a href="#" class="nav-link parent-hover-animation @if($activePage=='menu' || $activePage=='manageMenu') active @endif">
+                <i class="nav-icon shake-icon fab fa-elementor"></i>
+                <p>
+                    Menu
+                    <i class="right fas fa-angle-left"></i>
+                </p>
                 </a>
+                <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ action('MenuController@showMenu') }}" class="nav-link parent-hover-animation @if($activePage=='manageMenu') active @endif">
+                        <i class="nav-icon shake-icon fas fa-th-list subList"></i>
+                        <p>
+                            Manage Menu
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ action('MenuController@createMenu') }}" class="nav-link parent-hover-animation @if($activePage=='menu') active @endif">
+                        <i class="nav-icon shake-icon fas fa-plus-circle subList"></i>
+                        <p>
+                            Create Menu
+                        </p>
+                    </a>
+                </li>
+                </ul>
             </li>
           @else
             <li class="nav-item">
