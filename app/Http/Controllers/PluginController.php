@@ -135,6 +135,7 @@ class PluginController extends Controller
                             $menuVoice->name = $array["menuVoice"];
                             $menuVoice->url = $array["menuLink"];
                             $menuVoice->icon = $array["menuIcon"];
+                            $menuVoice->roles = 1;
                             $menuVoice->slug = $array["author"]."_".$array["name"];
                             $menuVoice->save();
 
@@ -170,7 +171,7 @@ class PluginController extends Controller
 
     private function installPlugin($author, $pluginName)
     {
-        $provider = file(app_path('Http\Plugins\PluginProvider.php'), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $provider = file(app_path('Http/Plugins/PluginProvider.php'), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         $flag = false;
         $positionInsert = "";
 
@@ -181,26 +182,32 @@ class PluginController extends Controller
             if ($provider[$key] == '        $calls->' . $pluginName . '();') {
                 $flag = true;
             }
-        }
-
-        if ($flag == false) {
-            array_splice($provider, $positionInsert, 0, '        $calls->' . $pluginName . '();');
-        }
-
-        foreach ($provider as $key => $value) {
-            if ($value == "                //Automatic insert of Provider") {
-                $positionInsert = $key + 1;
-            }
-            if ($provider[$key] == '                app_path("\Http\Plugins\\\\' . $author . '\\\\" . $name  . "\\\\routes\web.php"),') {
+            if ($provider[$key] == '        $this->loadTranslationsFrom(app_path("Http/Plugins/'.$author.'/'.$pluginName.'/lang"), "'.$author.'.'.$pluginName.'");') {
                 $flag = true;
             }
         }
 
         if ($flag == false) {
-            array_splice($provider, $positionInsert, 0, '                app_path("\Http\Plugins\\\\' . $author . '\\\\" . $name  . "\\\\routes\web.php"),');
+            array_splice($provider, $positionInsert, 0, '        $calls->' . $pluginName . '();');
+            array_splice($provider, $positionInsert+1, 0, '        $this->loadTranslationsFrom(app_path("Http/Plugins/'.$author.'/'.$pluginName.'/lang"), "'.$author.'.'.$pluginName.'");');
         }
 
-        $myfile = fopen(app_path('Http\Plugins\PluginProvider.php'), "w");
+        $flag = false;
+
+        foreach ($provider as $key => $value) {
+            if ($value == "                //Automatic insert of Provider") {
+                $positionInsert = $key + 1;
+            }
+            if ($provider[$key] == '                app_path("Http/Plugins/' . $author . '/" . $name  . "/routes/web.php"),') {
+                $flag = true;
+            }
+        }
+
+        if ($flag == false) {
+            array_splice($provider, $positionInsert, 0, '                app_path("Http/Plugins/' . $author . '/" . $name  . "/routes/web.php"),');
+        }
+
+        $myfile = fopen(app_path('Http/Plugins/PluginProvider.php'), "w");
         $provider = implode("\n", $provider);
         $txt = $provider;
 
@@ -213,11 +220,11 @@ class PluginController extends Controller
             $plugin = Plugin::find($id);
 
             if($plugin){
-                $path = app_path('Http\Plugins\\'.$plugin->author.'\\'.$plugin->name);
+                $path = app_path('Http/Plugins/'.$plugin->author.'/'.$plugin->name);
                 if (file_exists($path)) {
                     File::deleteDirectory($path);
 
-                    $path = app_path('Http\Plugins\\'.$plugin->author);
+                    $path = app_path('Http/Plugins/'.$plugin->author);
 
                     if ($this->is_dir_empty($path)) {
                         //the folder is empty"
@@ -253,7 +260,7 @@ class PluginController extends Controller
     }
 
     private function removeFromFile($author, $pluginName, $pluginId){
-        $provider = file(app_path('Http\Plugins\PluginProvider.php'), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $provider = file(app_path('Http/Plugins/PluginProvider.php'), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         $flag = false;
         $positionInsert = "";
 
@@ -267,12 +274,22 @@ class PluginController extends Controller
             unset($provider[$positionInsert]);
         }
 
+        foreach ($provider as $key => $value) {
+            if ($value == '        $this->loadTranslationsFrom(app_path("Http/Plugins/'.$author.'/'.$pluginName.'/lang"), "'.$author.'.'.$pluginName.'");') {
+                $positionInsert = $key;
+            }
+        }
+
+        if ($positionInsert != "") {
+            unset($provider[$positionInsert]);
+        }
+
         $plugins = Plugin::where('author', '=', $author)->where('id','<>', $pluginId)->first();
 
         if(!$plugins){
             $positionInsert = "";
             foreach ($provider as $key => $value) {
-                if ($value == '                app_path("\Http\Plugins\\\\' . $author . '\\\\" . $name  . "\\\\routes\web.php"),') {
+                if ($value == '                app_path("Http/Plugins/' . $author . '/" . $name  . "/routes/web.php"),') {
                     $positionInsert = $key;
                 }
             }
@@ -282,7 +299,7 @@ class PluginController extends Controller
             }
         }
 
-        $myfile = fopen(app_path('Http\Plugins\PluginProvider.php'), "w");
+        $myfile = fopen(app_path('Http/Plugins/PluginProvider.php'), "w");
         $provider = implode("\n", $provider);
         $txt = $provider;
         fwrite($myfile, $txt);
@@ -315,18 +332,18 @@ class PluginController extends Controller
             $plugin = Plugin::find($id);
 
             $file = $plugin->name.".php";
-            $path = app_path('Http\Plugins\\');
+            $path = app_path('Http/Plugins/');
 
             if ($request->has('file')) {
                 $file = $request->file;
                 $content = File::get($path.$file);
             }
             else{
-                $path = app_path('Http\Plugins\\'.$plugin->author.'\\'.$plugin->name);
-                $content = File::get($path.'\\'.$file);
+                $path = app_path('Http/Plugins/'.$plugin->author.'/'.$plugin->name);
+                $content = File::get($path.'/'.$file);
             }
 
-            $path = app_path('Http\Plugins\\'.$plugin->author.'\\'.$plugin->name);
+            $path = app_path('Http/Plugins/'.$plugin->author.'/'.$plugin->name);
 
             //$content = Blade::compileString($content);
 
@@ -393,7 +410,7 @@ class PluginController extends Controller
                         // Get extension (prepend 'ext-' to prevent invalid classes from extensions that begin with numbers)
                         $ext = "ext-" . substr($this_file, strrpos($this_file, ".") + 1);
                         $link = str_replace("[link]", "$directory/" . urlencode($this_file), $return_link);
-                        $link = str_replace(app_path('Http\Plugins\\'), "", $link);
+                        $link = str_replace(app_path('Http/Plugins/'), "", $link);
                         $php_file_tree .= "<li class=\"pft-file " . strtolower($ext) . "\"><a href=\"$link\">" . htmlspecialchars($this_file) . "</a></li>";
                     }
                 }
@@ -413,10 +430,10 @@ class PluginController extends Controller
                 $plugin = Plugin::find($id);
 
                 if($file == null || $file == ""){
-                    $file = $plugin->author.'\\'.$plugin->name.'\\'.$plugin->name.".php";
+                    $file = $plugin->author.'/'.$plugin->name.'/'.$plugin->name.".php";
                 }
 
-                $path = app_path('Http\Plugins\\');
+                $path = app_path('Http/Plugins/');
                 File::put($path.$file, $content);
 
                 return response()->json(['code' => 'success', 'state' => 'Success', 'message' => 'Successfully saved']);
@@ -483,6 +500,7 @@ class PluginController extends Controller
             $this->createControllerPlugin($path, $author, $name);
             $this->createRoutePlugin($path, $author, $name);
             $this->createViewPlugin($path, $author, $name);
+            $this->createLangPlugin($path);
             $this->createAssetsPlugin($path);
             $this->createReadmePlugin($path, $description);
             $this->createInfoPlugin($path, $name, $description, $author, $email);
@@ -533,7 +551,7 @@ class PluginController extends Controller
 
     private function createModelPlugin($path, $author, $name)
     {
-        $myfile = $path . "\\" . $name . ".php";
+        $myfile = $path . "/" . $name . ".php";
         $txt = '<?php
 
 namespace App\Models;
@@ -572,7 +590,7 @@ class Controller' . $name . ' extends PluginController
 {
     private function views($page)
     {
-        return PluginController::pluginPage("' . $author . '\\' . $name . '\\\views\\\" . $page, "' . $author . '_' . $name . '");
+        return PluginController::pluginPage("' . $author . '/' . $name . '/views/" . $page, "' . $author . '_' . $name . '");
     }
 
     public function index()
@@ -637,13 +655,7 @@ Route::get('/admin/" . $author . '/' . $name . "/', [Controller" . $name . "::cl
         <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Starter Page</h1>
-            </div><!-- /.col -->
-            <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">Starter Page</li>
-            </ol>
+            <h1 class="m-0 text-dark">{{ Lang::get(\''.$author.'.'.$name.'::messages.welcome\') }}</h1>
             </div><!-- /.col -->
         </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -758,6 +770,29 @@ Route::get('/admin/" . $author . '/' . $name . "/', [Controller" . $name . "::cl
         //create file and insert text
         $myfile = $jsPath . "main.js";
         File::put($myfile, '');
+    }
+
+    private function createLangPlugin($path){
+        $path = $path.'lang/';
+        if (!file_exists($path)) {
+            File::makeDirectory($path);
+        }
+
+        $path = $path.'en/';
+        if (!file_exists($path)) {
+            File::makeDirectory($path);
+        }
+
+        //create file and insert text
+        $myfile = $path . "messages.php";
+        $txt = "<?php
+
+        //lang/en/messages.php
+
+        return [
+            'welcome' => 'Welcome to our plugin! Have Fun by Iry-CMS (for change me read our guide https://iry-cms.com/docs/localization)',
+        ];";
+        File::put($myfile, $txt);
     }
 
     private function createReadmePlugin($path, $description)
