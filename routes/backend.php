@@ -38,6 +38,7 @@ Route::group(['prefix' => 'admin',  'middleware' => 'auth'], function(){
 Route::group(['prefix' => 'admin',  'middleware' => 'checkRole'], function(){
     Route::get('/post/create', [PostController::class, 'createPost']);
     Route::post('/post/upload/file', [PostController::class, 'uploadFile']);
+    Route::post('/post/download/file', [PostController::class, 'downloadFile']);
 });
 
 

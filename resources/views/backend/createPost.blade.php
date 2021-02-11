@@ -166,16 +166,19 @@
                 init: function() {
                     this.on("addedfile", function(file) {
                         file.previewElement.addEventListener("click", function(e) {
-                            console.log(file.xhr.response);
+                            console.log(JSON.parse(file.xhr.response.file));
 
-                           /* let imgNode = document.createElement("img");
-                            imgNode.setAttribute('src', file.xhr.response)*/
-                            let imgNode = document.createElement("a");
-                            imgNode.setAttribute('href', "file:///"+file.xhr.response);
+                            let path = "{{ asset('') }}"
+
+                            let imgNode = document.createElement("img");
+                            imgNode.setAttribute('src', path + file.xhr.response)
+
+                            /*let imgNode = document.createElement("a");
+                            imgNode.setAttribute('href', file.xhr.response);
                             imgNode.setAttribute('title', "file.xhr.response");
-                            imgNode.setAttribute('download', true);
                             var link = document.createTextNode("This is link");
-                            imgNode.appendChild(link);
+                            imgNode.appendChild(link);*/
+
                             $('#summernote').summernote('insertNode', imgNode);
                         });
                     });

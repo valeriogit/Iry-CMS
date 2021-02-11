@@ -24,7 +24,17 @@ class PostController extends Controller
     }
 
     public function uploadFile(Request $request){
-        return asset('img/logoIry.png');
-        return "lifgdfgsdfgfgdgsfgnk";
+
+        $file = array(
+            "type" => "image",
+            "link" => "img/logoIry.png"
+        );
+
+        return response()->json([ "file" => $file ],200);
+    }
+
+    public function downloadFile($file){
+        $pathToFile = public_path('');
+        return response()->download($pathToFile);
     }
 }
