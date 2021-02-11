@@ -234,7 +234,8 @@ return [
         'GoogleAnalytics' => App\Models\GoogleAnalytics::class,
         'Roles' => App\Models\Role::class,
         'Menu' => App\Models\Menu::class,
-        'Image' => Intervention\Image\Facades\Image::class
+        'Image' => Intervention\Image\Facades\Image::class,
+        'Post' => App\Models\Post::class
     ],
 
 ];

@@ -33,10 +33,11 @@ Route::group(['prefix' => 'admin',  'middleware' => 'auth'], function(){
 
 
 /*
-* Routes where user is not a subscriber
+* Routes where user role is not a subscriber
 */
 Route::group(['prefix' => 'admin',  'middleware' => 'checkRole'], function(){
-
+    Route::get('/post/create', [PostController::class, 'createPost']);
+    Route::post('/post/upload/file', [PostController::class, 'uploadFile']);
 });
 
 
@@ -100,12 +101,3 @@ Route::get('/assets/{author}/{plugin}/{folder}/{file}', [ function ($author, $pl
 
     return response()->json([ ], 404);
 }]);
-
-/*
-* Route for 404
-*/
-Route::fallback(function () {
-
-    return view("404");
-
-});

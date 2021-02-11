@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Notifications\PushDemo;
 use App\Models\User;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Notification;
 use Illuminate\Support\Facades\DB;
 

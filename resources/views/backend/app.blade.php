@@ -23,11 +23,9 @@
   <link rel="stylesheet" href="{{ asset('css/fontawesome-free/css/all.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('css/adminlte/adminlte.min.css') }}">
-  <!-- Sweet Alert -->
-  <link rel="stylesheet" href="{{ asset('css/sweetalert2/bootstrap-4.min.css') }}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-    <!-- Sweet Alert -->
+  <!-- Sweet Alert -->
   <link rel="stylesheet" href="{{ asset('css/sweetalert2/bootstrap-4.min.css') }}">
   <link rel="stylesheet" href="{{ asset('css/backend/backend.css') }}">
 
@@ -132,7 +130,36 @@
               </p>
             </a>
           </li>
-          @if(Roles::checkRole(['administrator']))
+        @if(Roles::checkRoleId([1,2,3,4]))
+        <li class="nav-item @if($activePage=='post' || $activePage=='managePost') menu-open @endif ">
+            <a href="#" class="nav-link parent-hover-animation @if($activePage=='post' || $activePage=='managePost') active @endif">
+            <i class="nav-icon shake-icon fas fa-book-reader"></i>
+            <p>
+                Post
+                <i class="right fas fa-angle-left"></i>
+            </p>
+            </a>
+            <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{{ action('ProfileController@showUser') }}" class="nav-link parent-hover-animation @if($activePage=='managePost') active @endif">
+                    <i class="nav-icon shake-icon fas fa-book subList"></i>
+                    <p>
+                        Manage Post
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ action('PostController@createPost') }}" class="nav-link parent-hover-animation @if($activePage=='post') active @endif">
+                    <i class="nav-icon shake-icon fas fa-file-medical subList"></i>
+                    <p>
+                        Create Post
+                    </p>
+                </a>
+            </li>
+            </ul>
+        </li>
+        @endif
+        @if(Roles::checkRoleId([1]))
             <li class="nav-item">
                 <a href="{{ action('SettingsController@index') }}" class="nav-link parent-hover-animation @if($activePage=='settings') active @endif">
                     <i class="nav-icon shake-icon fas fa-cogs "></i>
@@ -203,7 +230,7 @@
                 </li>
                 </ul>
             </li>
-          @else
+        @else
             <li class="nav-item">
                 <a href="{{ action('ProfileController@getProfile') }}" class="nav-link parent-hover-animation @if($activePage=='profile') active @endif">
                     <i class="nav-icon shake-icon fas fa-user "></i>
@@ -212,8 +239,8 @@
                     </p>
                 </a>
             </li>
-          @endif
-          @foreach(Menu::getMenuBackend() as $item)
+        @endif
+        @foreach(Menu::getMenuBackend() as $item)
             @if(Roles::checkRoleMenu($item->roles))
                 <li class="nav-item">
                     <a href="{{ $item->url }}" class="nav-link parent-hover-animation @if($activePage==$item->slug) active @endif">
@@ -224,7 +251,7 @@
                     </a>
                 </li>
             @endif
-          @endforeach
+        @endforeach
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

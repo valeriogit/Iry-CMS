@@ -24,6 +24,6 @@ class roleMiddleware
             return $next($request);
         }
 
-        return redirect()->action([AccessoController::class, 'getLogin']);
+        abort(401);
     }
 }
