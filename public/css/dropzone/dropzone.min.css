@@ -264,7 +264,7 @@
     background: linear-gradient(to bottom, #eee, #ddd);
 }
 .dropzone .dz-preview.dz-file-preview .dz-details {
-    opacity: 1;
+    opacity: 0;
 }
 .dropzone .dz-preview.dz-image-preview {
     background: white;
@@ -310,7 +310,7 @@
 }
 .dropzone .dz-preview .dz-details .dz-filename {
     white-space: nowrap;
-    display: none;
+    /*display: none;*/
 }
 .dropzone .dz-preview .dz-details .dz-filename:hover span {
     border: 1px solid rgba(200, 200, 200, 0.8);

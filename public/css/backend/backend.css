@@ -124,3 +124,7 @@
 .subList {
     margin-left: 20px !important;
 }
+
+.pagination {
+    justify-content: center !important;
+}

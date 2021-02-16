@@ -25,65 +25,64 @@
 
     <!-- Main content -->
     <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-3 col-sm-12 mr-4">
-                <div class="card border-primary">
-                    <div class="card-header bg-primary text-white">Edit item menu</div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3 col-sm-12 mr-4">
+                    <div class="card border-primary">
+                        <div class="card-header bg-primary text-white">Edit item menu</div>
                         <div class="card-body">
-                        <form id="frmEdit" class="form-horizontal">
-                        <div class="form-group">
-                        <label for="text">Text</label>
-                        <div class="input-group">
-                        <input type="text" class="form-control item-menu" name="text" id="text" placeholder="Text">
-                        <div class="input-group-append">
-                        <button type="button" id="myEditor_icon" class="btn btn-outline-secondary"></button>
+                            <form id="frmEdit" class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="text">Text</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control item-menu" name="text" id="text" placeholder="Text">
+                                        <div class="input-group-append">
+                                            <button type="button" id="myEditor_icon" class="btn btn-outline-secondary"></button>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="icon" class="item-menu">
+                                </div>
+                                <div class="form-group">
+                                    <label for="href">URL</label>
+                                    <input type="text" class="form-control item-menu" id="href" name="href" placeholder="URL">
+                                </div>
+                                <div class="form-group">
+                                    <label for="target">Target</label>
+                                    <select name="target" id="target" class="form-control item-menu">
+                                        <option value="_self">Self</option>
+                                        <option value="_blank">Blank</option>
+                                        <option value="_top">Top</option>
+                                    </select>
+                                </div>
+                            </form>
                         </div>
+                        <div class="card-footer">
+                            <button type="button" id="btnUpdate" class="btn btn-info" disabled>Update item</button>
+                            <button type="button" id="btnAdd" class="btn btn-primary">Add item</button>
+                            <button type="button" id="btnSave" class="btn btn-success float-right">Save menu</button>
                         </div>
-                        <input type="hidden" name="icon" class="item-menu">
+                    </div>
+                </div>
+                <div class="col-md-8 col-sm-12">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="name">Menu name</label>
+                                <input type="text" class="form-control item-menu" id="name" name="name" placeholder="Menu name">
+                            </div>
                         </div>
-                        <div class="form-group">
-                        <label for="href">URL</label>
-                        <input type="text" class="form-control item-menu" id="href" name="href" placeholder="URL">
+                        <div class="col-12">
+                            <ul id="myEditor" class="sortableLists list-group"></ul>
                         </div>
-                        <div class="form-group">
-                        <label for="target">Target</label>
-                        <select name="target" id="target" class="form-control item-menu">
-                        <option value="_self">Self</option>
-                        <option value="_blank">Blank</option>
-                        <option value="_top">Top</option>
-                        </select>
-                        </div>
-                        </form>
-                        </div>
-                    <div class="card-footer">
-                        <button type="button" id="btnUpdate" class="btn btn-info" disabled>Update item</button>
-                        <button type="button" id="btnAdd" class="btn btn-primary">Add item</button>
-                        <button type="button" id="btnSave" class="btn btn-success float-right">Save menu</button>
                     </div>
                 </div>
             </div>
-            <div class="col-md-8 col-sm-12">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="form-group">
-                            <label for="name">Menu name</label>
-                            <input type="text" class="form-control item-menu" id="name" name="name" placeholder="Menu name">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <ul id="myEditor" class="sortableLists list-group"></ul>
-                    </div>
-                </div>
-            </div>
+            <!-- /.row -->
         </div>
-
-        <!-- /.row -->
-      </div>
-      <!-- /.container-fluid -->
+        <!-- /.container-fluid -->
     </section>
     <!-- /.content -->
-  </div>
+</div>
   <!-- /.content-wrapper -->
 @endsection
 
