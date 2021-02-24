@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Configuration;
 use App\Models\Media;
 use App\Models\Post;
+use App\Models\Category;
 
 class PostController extends Controller
 {
@@ -24,12 +25,14 @@ class PostController extends Controller
 
         $media = Media::paginate(12);
         $totMedia = $media->lastPage();
+        $categories = Category::all();
 
         return view('backend.createPost')
             ->with('config', $this->config)
             ->with('activePage', $this->activePage)
             ->with('media', $media)
-            ->with('totMedia', $totMedia);
+            ->with('totMedia', $totMedia)
+            ->with('categories', $categories);
     }
 
     public function uploadFile(Request $request){
@@ -81,5 +84,15 @@ class PostController extends Controller
         }
 
         return response()->json( $media ,200);
+    }
+
+    public function checkTitlePost(Request $request){
+        $validated = $request->validate([
+            'title' => 'required|max:255'
+        ]);
+
+        $found = Post::where('slug', '=', $request->title)->count();
+
+        return $found;
     }
 }
